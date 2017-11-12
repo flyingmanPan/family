@@ -1,4 +1,4 @@
-
+#include "struct.hpp"
 family::family()
 {
     oldest = nullptr;
