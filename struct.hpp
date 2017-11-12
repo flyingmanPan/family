@@ -34,7 +34,7 @@ struct person
         junior = nullptr;
         isMale = true;
     }
-    person(string name_, string wife_name_, string born, string dead)
+    person(string name_, string wife_name_, string born, string dead,bool isMale_)
     {
         name = name_;
         if (wife_name_ != "NULL" && wife_name_.size())
@@ -45,9 +45,9 @@ struct person
             dead_date = Date(dead);
         compeer = nullptr;
         junior = nullptr;
-        isMale = true;
+        isMale = isMale_;
     }
-    person(string name_, string wife_name_, Date born, Date dead)
+    person(string name_, string wife_name_, Date born, Date dead,bool isMale_)
     {
         name = name_;
         if (wife_name_ != "NULL" && wife_name_.size())
@@ -56,7 +56,7 @@ struct person
         dead_date = dead;
         compeer = nullptr;
         junior = nullptr;
-        isMale = true;
+        isMale = isMale_;
     }
 };
 
@@ -96,13 +96,17 @@ class family
     void test_z();
     //for z to test
     //--------Change Func----------
-    bool add_person(bool isCompeer, string name_, string wife_name,
-        string born, string dead);
+    bool addPerson(bool isCompeer, string name_, string wife_name,
+        string born, string dead,bool isMale,person* ptr);
         //1:Judge which side to place,compeer or junior;
         //2:3:...
         //4:5:Date form string:e.g. 1989-06-04/20:00
-
-    
+        //6:On who?
+    void changePerson(person* ptr,string name_, string wife_name,
+        Date born, Date dead,bool isMale);
+        //1:Who
+        //...
+    void changePerson(person*ptr ,person* source);
     //--------Find func------------
 
     person *findName(string, person *);

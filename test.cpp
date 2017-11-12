@@ -33,7 +33,7 @@ int main()
             //cin>> born >> dead;
             int isCompeer = 0;
             cin >> isCompeer;
-            oldest.add_person(isCompeer, name, wife_name, born, dead);
+            //oldest.addPerson(isCompeer, name, wife_name, born, dead,true);
             break;
         }
         case 'c':
