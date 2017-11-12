@@ -23,6 +23,7 @@ struct person
     Date dead_date;
     person *compeer;
     person *junior;
+
     person()
     {
         name = "NULL";
@@ -59,7 +60,9 @@ class family
   private:
     person *oldest;
     void clear(person *);
+    //Clear all tree;
     void buildTree(const person *source, person *&target);
+    //Copy the tree from source node to target node.
 
   public:
     
@@ -69,10 +72,17 @@ class family
     
     bool add_person(bool isCompeer, string name_, string wife_name,
                     string born, string dead);
+    //1:Judge which side to place,compeer or junior;
+    //2:3:...
+    //4:5:Date form string:e.g. 1989-06-04/20:00
     void findCompeer(person *);
+    //traverse all compeer from the node.
     void findAllJunior(person *);
+    //NULL
     void printCompeer();
+    //traverse all compeer from the oldest node, and print
     void printAllJunior();
+    //traverse all compeer from the oldest's junior node, and print
     void test();
 };
 
