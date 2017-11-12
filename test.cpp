@@ -61,3 +61,4 @@ int main()
         }
     }
 }
+//a a a1 1 a b b1 1 a c c1 0

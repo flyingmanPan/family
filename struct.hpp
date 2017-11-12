@@ -245,6 +245,11 @@ void family::test_z()
             clear(oldest);
             break;
         }
+        case 't':
+        {
+            traverse(oldest);
+            break;
+        }
         }
     }
 }
@@ -283,10 +288,14 @@ person* family::findName(string name_,person* ptr)
 }
 void family::traverse(person* ptr)
 {
-    do
+    while(1)
     {
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
         if(ptr->junior!=nullptr)
             traverse(ptr->junior);
-    }while(ptr->compeer!=nullptr);
+        if(ptr->compeer!=nullptr)
+            ptr=ptr->compeer;
+        else
+            break;
+    }
 }
