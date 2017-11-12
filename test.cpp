@@ -48,10 +48,16 @@ int main()
         }
         case 't':
         {
-            oldest.test();
+            oldest.test_z();
             break;
         }
-        
+        case 'f':
+        {
+            string temp;
+            cin>>temp;
+            oldest.printByName(temp);
+            break;
+        }
         }
     }
 }

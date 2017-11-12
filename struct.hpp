@@ -59,9 +59,11 @@ class family
 {
   private:
     person *oldest;
+
     void clear(person *);
     //Clear all tree;
-    void buildTree(const person *source, person *&target);
+
+    void copyTree(const person *source, person *&target);
     //Copy the tree from source node to target node.
 
   public:
@@ -75,15 +77,36 @@ class family
     //1:Judge which side to place,compeer or junior;
     //2:3:...
     //4:5:Date form string:e.g. 1989-06-04/20:00
-    void findCompeer(person *);
-    //traverse all compeer from the node.
-    void findAllJunior(person *);
-    //NULL
+
+
     void printCompeer();
     //traverse all compeer from the oldest node, and print
+
     void printAllJunior();
     //traverse all compeer from the oldest's junior node, and print
-    void test();
+    
+    void printByName(string);
+    //Print a person's info by name;
+    void test_z();
+    //for z to test
+
+    //--------Find func------------
+
+    person* findName(string,person*);
+    //include all name, such as name & wife name.
+
+    void findCompeer(person *);
+    //traverse all compeer from the node.
+
+    void findAllJunior(person *);
+    //NULL
+
+    //-----------------------------
+
+
+    //------traverse func--------
+    void traverse(person*);
+
 };
 
 family::family()
@@ -102,7 +125,7 @@ family::family(const family &other)
     {
         oldest = new person(other.oldest->name, other.oldest->wife_name,
                             other.oldest->born_date, other.oldest->dead_date);
-        buildTree(other.oldest, oldest);
+        copyTree(other.oldest, oldest);
     }
 }
 bool family::add_person(bool isCompeer, string name_, string wife_name_, string born, string dead)
@@ -153,6 +176,11 @@ void family::printAllJunior()
 {
     findCompeer(oldest->junior);
 }
+void family::printByName(string name_)
+{
+    auto ptr=findName(name_,oldest);
+    cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+}
 void family::findCompeer(person *ptr)
 {
     if (ptr != nullptr)
@@ -182,7 +210,7 @@ void family::clear(person *ptr)
     }
 }
 
-void family::test()
+void family::test_z()
 {
     auto ptr=oldest;
     while (1)
@@ -220,20 +248,40 @@ void family::test()
         }
     }
 }
-void family::buildTree(const person *Source_Root, person *&Target_Root)
+void family::copyTree(const person *Source_Root, person *&Target_Root)
 {
     if (Source_Root->junior != nullptr)
     {
         person *l = new person(Source_Root->junior->name, Source_Root->junior->wife_name,
                                Source_Root->junior->born_date, Source_Root->junior->dead_date);
-        buildTree(Source_Root->junior, l); //copy the left;
+        copyTree(Source_Root->junior, l); //copy the left;
         Target_Root->junior = l;
     }
     if (Source_Root->compeer != nullptr)
     {
         person *r = new person(Source_Root->compeer->name, Source_Root->compeer->wife_name,
                                Source_Root->compeer->born_date, Source_Root->compeer->dead_date);
-        buildTree(Source_Root->compeer, r); //copy the right;
+        copyTree(Source_Root->compeer, r); //copy the right;
         Target_Root->compeer = r;
     }
+}
+
+person* family::findName(string name_,person* ptr)
+{
+    if(ptr!=nullptr)                                //preorder
+    {
+        if(ptr->name==name_||ptr->wife_name==name_)
+            return ptr;
+        findName(name_,ptr->junior);
+        findName(name_,ptr->compeer);
+    }
+}
+void family::traverse(person* ptr)
+{
+    do
+    {
+        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        if(ptr->junior!=nullptr)
+            traverse(ptr->junior);
+    }while(ptr->compeer!=nullptr);
 }
