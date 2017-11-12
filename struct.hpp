@@ -19,6 +19,7 @@ struct person
 {
     string name;
     string wife_name;
+    bool isMale;
     Date born_date;
     Date dead_date;
     person *compeer;
@@ -30,6 +31,7 @@ struct person
         wife_name = "NULL";
         compeer = nullptr;
         junior = nullptr;
+        isMale = true;
     }
     person(string name_, string wife_name_, string born, string dead)
     {
@@ -42,6 +44,7 @@ struct person
             dead_date = Date(dead);
         compeer = nullptr;
         junior = nullptr;
+        isMale = true;
     }
     person(string name_, string wife_name_, Date born, Date dead)
     {
@@ -52,6 +55,7 @@ struct person
         dead_date = dead;
         compeer = nullptr;
         junior = nullptr;
+        isMale = true;
     }
 };
 
@@ -67,34 +71,37 @@ class family
     //Copy the tree from source node to target node.
 
   public:
-    
     family();
     ~family();
     family(const family &);
-    
+
     bool add_person(bool isCompeer, string name_, string wife_name,
                     string born, string dead);
     //1:Judge which side to place,compeer or junior;
     //2:3:...
     //4:5:Date form string:e.g. 1989-06-04/20:00
 
-
     void printCompeer();
     //traverse all compeer from the oldest node, and print
 
     void printAllJunior();
     //traverse all compeer from the oldest's junior node, and print
-    
+
     void printByName(string);
     //Print a person's info by name;
+
+    void printParentByName(string);
+    //Print a person's parent info by name;
+
     void test_z();
     //for z to test
 
     //--------Find func------------
 
-    person* findName(string,person*);
+    person *findName(string, person *);
     //include all name, such as name & wife name.
-
+    //person* findParent(string);
+    person *findParent(person *, person *);
     void findCompeer(person *);
     //traverse all compeer from the node.
 
@@ -103,10 +110,8 @@ class family
 
     //-----------------------------
 
-
     //------traverse func--------
-    void traverse(person*);
-
+    void traverse(person *);
 };
 
 family::family()
@@ -178,7 +183,12 @@ void family::printAllJunior()
 }
 void family::printByName(string name_)
 {
-    auto ptr=findName(name_,oldest);
+    auto ptr = findName(name_, oldest);
+    cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+}
+void family::printParentByName(string name_)
+{
+    auto ptr = findParent(findName(name_, oldest), oldest);
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
 void family::findCompeer(person *ptr)
@@ -212,32 +222,32 @@ void family::clear(person *ptr)
 
 void family::test_z()
 {
-    auto ptr=oldest;
+    auto ptr = oldest;
     while (1)
     {
         char cmd;
-        cout<<"test>";
+        cout << "test>";
         cin >> cmd;
         switch (cmd)
         {
         case 'e':
-            return ;
+            return;
         case 'j':
         {
-            ptr=ptr->junior;
+            ptr = ptr->junior;
             break;
         }
         case 'c':
         {
-            ptr=ptr->compeer;
+            ptr = ptr->compeer;
             break;
         }
         case 'l':
         {
-            if(ptr->compeer==nullptr)
-                cout<<"compeer null"<<endl;
-            if(ptr->junior==nullptr)
-                cout<<"junior null"<<endl;
+            if (ptr->compeer == nullptr)
+                cout << "compeer null" << endl;
+            if (ptr->junior == nullptr)
+                cout << "junior null" << endl;
             break;
         }
         case 'r':
@@ -271,31 +281,46 @@ void family::copyTree(const person *Source_Root, person *&Target_Root)
     }
 }
 
-person* family::findName(string name_,person* ptr)
+person *family::findName(string name_, person *ptr)
 {
-    if(ptr!=nullptr)                                //preorder
+    if (ptr != nullptr) //preorder
     {
-        if(ptr->name==name_||ptr->wife_name==name_)
+        if (ptr->name == name_ || ptr->wife_name == name_)
             return ptr;
-        auto jun_ptr=findName(name_,ptr->junior);
-        auto com_ptr=findName(name_,ptr->compeer);
-        if(jun_ptr!=nullptr)
+        auto jun_ptr = findName(name_, ptr->junior);
+        auto com_ptr = findName(name_, ptr->compeer);
+        if (jun_ptr != nullptr)
             return jun_ptr;
-        if(com_ptr!=nullptr)
+        if (com_ptr != nullptr)
             return com_ptr;
         return nullptr;
     }
 }
-void family::traverse(person* ptr)
+void family::traverse(person *ptr)
 {
-    while(1)
+    while (1)
     {
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
-        if(ptr->junior!=nullptr)
+        if (ptr->junior != nullptr)
             traverse(ptr->junior);
-        if(ptr->compeer!=nullptr)
-            ptr=ptr->compeer;
+        if (ptr->compeer != nullptr)
+            ptr = ptr->compeer;
         else
             break;
+    }
+}
+person *family::findParent(person *son,person *ptr)
+{
+    if (ptr->junior != nullptr) //preorder
+    {
+        if (ptr->junior == son)
+            return ptr;
+        auto jun_ptr = findParent(son,ptr->junior);
+        auto com_ptr = findParent(son,ptr->compeer);
+        if (jun_ptr != nullptr)
+            return jun_ptr;
+        if (com_ptr != nullptr)
+            return com_ptr;
+        return nullptr;
     }
 }

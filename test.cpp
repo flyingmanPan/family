@@ -58,6 +58,13 @@ int main()
             oldest.printByName(temp);
             break;
         }
+        case 'p':
+        {
+            string temp;
+            cin>>temp;
+            oldest.printParentByName(temp);
+            break;
+        }
         }
     }
 }
