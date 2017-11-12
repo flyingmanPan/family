@@ -65,7 +65,13 @@ int main()
             oldest.printParentByName(temp);
             break;
         }
+        case 'g':
+        {
+            string temp;
+            cin>>temp;
+            oldest.printGenerationNumByName(temp);
+        }
         }
     }
 }
-//a a a1 1 a b b1 1 a c c1 0
+//a a a1 1 a b b1 1 a c c1 0 a d d1 0

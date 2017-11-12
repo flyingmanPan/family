@@ -87,12 +87,14 @@ class family
     void printAllJunior();
     //traverse all compeer from the oldest's junior node, and print
 
-    void printByName(string);
+    void printByName(string name);
     //Print a person's info by name;
 
-    void printParentByName(string);
+    void printParentByName(string name);
     //Print a person's parent info by name;
-
+    
+    void printGenerationNumByName(string name);
+    //Print generation number by name
     void test_z();
     //for z to test
 
@@ -101,17 +103,28 @@ class family
     person *findName(string, person *);
     //include all name, such as name & wife name.
     //person* findParent(string);
+    person *findJunior(person *);
+    //Who's?
     person *findParent(person *, person *);
-    void findCompeer(person *);
-    //traverse all compeer from the node.
-
-    void findAllJunior(person *);
-    //NULL
-
+    //find parent using findName. The second one is where to find, downside is the same.
+    int findGenerationNum(person *guy,person* ptr,int gen);
+    //Who? Root 0
     //-----------------------------
 
     //------traverse func--------
     void traverse(person *);
+    //traverse all tree
+
+    void traverseCompeer(person *);
+    //traverse all compeer from the node.
+
+    void traverseJunior(person *);
+    //NULL
+
+    //-------Delete func--------
+    //--------WARNING----------
+    void deleteOnefamily(person *);
+    //NULL
 };
 
 family::family()
@@ -175,11 +188,11 @@ bool family::add_person(bool isCompeer, string name_, string wife_name_, string 
 }
 void family::printCompeer()
 {
-    findCompeer(oldest);
+    traverseCompeer(oldest);
 }
 void family::printAllJunior()
 {
-    findCompeer(oldest->junior);
+    traverseCompeer(oldest->junior);
 }
 void family::printByName(string name_)
 {
@@ -191,21 +204,26 @@ void family::printParentByName(string name_)
     auto ptr = findParent(findName(name_, oldest), oldest);
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
-void family::findCompeer(person *ptr)
+
+void family::traverseCompeer(person *ptr)
 {
     if (ptr != nullptr)
     {
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
-        findCompeer(ptr->compeer);
+        traverseCompeer(ptr->compeer);
     }
 }
-void family::findAllJunior(person *ptr)
+void family::printGenerationNumByName(string name)
+{
+    cout<<findGenerationNum(findName(name,oldest),oldest,1)<<endl;
+}
+void family::traverseJunior(person *ptr)
 {
     /*
     if (ptr != nullptr)
     {
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
-        findCompeer(ptr->compeer);
+        traverseCompeer(ptr->compeer);
     }
     */
 }
@@ -309,18 +327,42 @@ void family::traverse(person *ptr)
             break;
     }
 }
-person *family::findParent(person *son,person *ptr)
+person *family::findParent(person *son, person *ptr)
 {
     if (ptr->junior != nullptr) //preorder
     {
         if (ptr->junior == son)
             return ptr;
-        auto jun_ptr = findParent(son,ptr->junior);
-        auto com_ptr = findParent(son,ptr->compeer);
+        auto jun_ptr = findParent(son, ptr->junior);
+        auto com_ptr = findParent(son, ptr->compeer);
         if (jun_ptr != nullptr)
             return jun_ptr;
         if (com_ptr != nullptr)
             return com_ptr;
         return nullptr;
+    }
+}
+person *family::findJunior(person *ptr)
+{
+    if (ptr->junior != nullptr) //preorder
+    {
+        return ptr->junior;
+    }
+    else
+        return nullptr;
+}
+void family::deleteOnefamily(person *ptr)
+{
+    ;
+}
+int family::findGenerationNum(person *guy,person* ptr,int gen)
+{
+    if (ptr != nullptr) //preorder
+    {
+        if (ptr==guy)
+            return gen;
+        auto jun = findGenerationNum(guy, ptr->junior,gen+1);
+        auto com = findGenerationNum(guy, ptr->compeer,gen);
+        return jun>com?jun:com;
     }
 }
