@@ -1,3 +1,15 @@
+/*——————————————————————————————————————————————
+
+
+
+
+Generate by ZZ
+
+
+
+
+
+*/
 #include <iostream>
 #include <string>
 #include "Date.hpp"
@@ -50,9 +62,11 @@ class family
     void buildTree(const person *source, person *&target);
 
   public:
+    
     family();
     ~family();
     family(const family &);
+    
     bool add_person(bool isCompeer, string name_, string wife_name,
                     string born, string dead);
     void findCompeer(person *);
@@ -94,19 +108,12 @@ bool family::add_person(bool isCompeer, string name_, string wife_name_, string 
     {
         cout << "Add compeer:";
         auto guy = root;
-        person *preguy = nullptr;
         while (guy->compeer != nullptr)
         {
-            preguy = guy;
             guy = guy->compeer;
         }
-        guy = new person(name_, wife_name_, born, dead);
-        if (preguy != nullptr)
-        {
-            preguy->compeer = guy;
-            cout << preguy->name << endl;
-        }
-        cout << guy->name << endl;
+        guy->compeer = new person(name_, wife_name_, born, dead);
+        cout << guy->compeer->name << endl;
     }
     else if (root != nullptr && !isCompeer)
     {
@@ -114,19 +121,17 @@ bool family::add_person(bool isCompeer, string name_, string wife_name_, string 
         if (root->junior == nullptr)
         {
             root->junior = new person(name_, wife_name_, born, dead);
+            cout << root->junior->name << endl;
         }
         else
         {
             auto guy = root->junior;
-            person *preguy = nullptr;
             while (guy->compeer != nullptr)
             {
-                preguy = guy;
                 guy = guy->compeer;
             }
-            guy = new person(name_, wife_name_, born, dead);
-            preguy->compeer = guy;
-            cout << guy->name << endl;
+            guy->compeer = new person(name_, wife_name_, born, dead);
+            cout << guy->compeer->name << endl;
         }
     }
 }
@@ -136,7 +141,7 @@ void family::printCompeer()
 }
 void family::printAllJunior()
 {
-    findAllJunior(oldest);
+    findCompeer(oldest->junior);
 }
 void family::findCompeer(person *ptr)
 {
@@ -148,30 +153,62 @@ void family::findCompeer(person *ptr)
 }
 void family::findAllJunior(person *ptr)
 {
+    /*
     if (ptr != nullptr)
     {
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
         findCompeer(ptr->compeer);
     }
+    */
 }
+
 void family::clear(person *ptr)
 {
-    while (ptr != nullptr)
+    if (ptr != nullptr)
     {
         clear(ptr->compeer);
         clear(ptr->junior);
         delete ptr;
     }
 }
+
 void family::test()
 {
-
-    if (oldest->compeer == nullptr)
-        cout << "Compeer Is empty";
-    if (oldest->junior == nullptr)
-        cout << " junior Is empty";
-    cout << oldest->name << "   " << oldest->wife_name << endl;
-    cout << oldest->compeer->name << "   " << oldest->compeer->wife_name << endl;
+    auto ptr=oldest;
+    while (1)
+    {
+        char cmd;
+        cout<<"test>";
+        cin >> cmd;
+        switch (cmd)
+        {
+        case 'e':
+            return ;
+        case 'j':
+        {
+            ptr=ptr->junior;
+            break;
+        }
+        case 'c':
+        {
+            ptr=ptr->compeer;
+            break;
+        }
+        case 'l':
+        {
+            if(ptr->compeer==nullptr)
+                cout<<"compeer null"<<endl;
+            if(ptr->junior==nullptr)
+                cout<<"junior null"<<endl;
+            break;
+        }
+        case 'r':
+        {
+            clear(oldest);
+            break;
+        }
+        }
+    }
 }
 void family::buildTree(const person *Source_Root, person *&Target_Root)
 {
