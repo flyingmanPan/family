@@ -272,8 +272,13 @@ person* family::findName(string name_,person* ptr)
     {
         if(ptr->name==name_||ptr->wife_name==name_)
             return ptr;
-        findName(name_,ptr->junior);
-        findName(name_,ptr->compeer);
+        auto jun_ptr=findName(name_,ptr->junior);
+        auto com_ptr=findName(name_,ptr->compeer);
+        if(jun_ptr!=nullptr)
+            return jun_ptr;
+        if(com_ptr!=nullptr)
+            return com_ptr;
+        return nullptr;
     }
 }
 void family::traverse(person* ptr)
