@@ -15,10 +15,10 @@ family::family(const family &other)
         oldest = nullptr;
     else
     {
-        currentPerson = other.currentPerson;
         oldest = new person(other.oldest->name, other.oldest->wife_name,
                             other.oldest->born_date, other.oldest->dead_date,other.oldest->isMale);
         copyTree(other.oldest, oldest);
+        currentPerson=findName(other.getCurrentName(),oldest);
     }
 }
 
@@ -252,7 +252,7 @@ void family::changePerson(person*ptr ,person* source)
     }
 }
 
-string family::getCurrentName()
+string family::getCurrentName() const
 {
     if(currentPerson == nullptr)
         return "";
@@ -266,6 +266,24 @@ bool family::changeCurrentPerson(string name)
         return false;
     currentPerson = ptr;
     return true;
+}
+
+bool family::moveCurrentPerson(int pos)
+{
+    switch(pos)
+    {
+        case 8:
+        {
+            auto ptr= findParent(findName(currentPerson->name,oldest),oldest);
+            if(ptr!=nullptr)
+            {
+                currentPerson=ptr;
+                return true;
+            }
+            return false;
+        }
+        case 
+    }
 }
 
 void family::test_z()

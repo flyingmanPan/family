@@ -147,6 +147,11 @@ class family
     bool addJunior(string name, string wife_name,
         string born, string dead, bool isMale);
     //Add junior at current person;
-    string getCurrentName();
+    string getCurrentName() const;
     bool changeCurrentPerson(string name);
+    bool moveCurrentPerson(int pos);
+    // 7  8  9
+    // 4  5  6
+    // 1  2  3
+    //8 up,2 down,4 left,6 right
 };
