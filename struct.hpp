@@ -15,7 +15,10 @@ Generate by ZZ
 #include "Date.hpp"
 
 using namespace std;
-
+//-------------------------
+//-------------------------
+#define test
+//-------------------
 struct person
 {
     string name;
@@ -34,7 +37,7 @@ struct person
         junior = nullptr;
         isMale = true;
     }
-    person(string name_, string wife_name_, string born, string dead,bool isMale_)
+    person(string name_, string wife_name_, string born, string dead, bool isMale_)
     {
         name = name_;
         if (wife_name_ != "NULL" && wife_name_.size())
@@ -47,7 +50,7 @@ struct person
         junior = nullptr;
         isMale = isMale_;
     }
-    person(string name_, string wife_name_, Date born, Date dead,bool isMale_)
+    person(string name_, string wife_name_, Date born, Date dead, bool isMale_)
     {
         name = name_;
         if (wife_name_ != "NULL" && wife_name_.size())
@@ -73,17 +76,17 @@ class family
     //Copy the tree from source node to target node.
     //--------Change Func----------
     bool addPerson(bool isCompeer, string name_, string wife_name,
-        string born, string dead,bool isMale,person* ptr);
-        //1:Judge which side to place,compeer or junior;
-        //2:3:...
-        //4:5:Date form string:e.g. 1989-06-04/20:00
-        //6:On who?
+                   string born, string dead, bool isMale, person *ptr);
+    //1:Judge which side to place,compeer or junior;
+    //2:3:...
+    //4:5:Date form string:e.g. 1989-06-04/20:00
+    //6:On who?
 
-    void changePerson(person* ptr,string name_, string wife_name,
-        Date born, Date dead,bool isMale);
-        //1:Who
-        //...
-    void changePerson(person*ptr ,person* source);
+    void changePerson(person *ptr, string name_, string wife_name,
+                      Date born, Date dead, bool isMale);
+    //1:Who
+    //...
+    void changePerson(person *ptr, person *source);
 
     //--------Find func------------
     person *findName(string, person *);
@@ -93,15 +96,18 @@ class family
     //Who's?
     person *findParent(person *, person *);
     //find parent using findName. The second one is where to find, downside is the same.
-    person *findPreCompeer(person *, person *);
+    person *findPreCompeer(person *);
     //find the front of compeer using findName. The second one is where to find, downside is the same.
-    int findGenerationNum(person *guy,person* ptr,int gen);
+    person *findBigCompeer(person *, person *, person *);
+    //find the first of compeer using findName.
+    //The second one is where to find, downside is the same.
+    //The third one is the BIG
+    int findGenerationNum(person *guy, person *ptr, int gen);
     //Who? Root 0
     //-----------------------------
 
-
     //------traverse func--------
-    void traverse(person * ptr);
+    void traverse(person *ptr);
     //traverse all tree
 
     void traverseCompeer(person *);
@@ -110,7 +116,6 @@ class family
     void traverseJunior(person *);
     //NULL
     //----------------------------
-
 
     //-------Delete func--------
     //--------WARNING----------
@@ -144,10 +149,10 @@ class family
     //for z to test
 
     bool addCompeer(string name, string wife_name,
-        string born, string dead, bool isMale);
+                    string born, string dead, bool isMale);
     //Add compeer at current person;
     bool addJunior(string name, string wife_name,
-        string born, string dead, bool isMale);
+                   string born, string dead, bool isMale);
     //Add junior at current person;
     string getCurrentName() const;
     bool changeCurrentPerson(string name);

@@ -31,9 +31,12 @@ int main()
             string name, wife_name, born, dead;
             cin >> name >> wife_name ;
             //cin>> born >> dead;
-            int isCompeer = 0;
-            cin >> isCompeer;
-            //oldest.addPerson(isCompeer, name, wife_name, born, dead,true);
+            char cmd2;
+            cin >> cmd2;
+            if(cmd2=='1')
+                oldest.addCompeer(name, wife_name, born, dead,true);
+            else
+                oldest.addJunior(name, wife_name, born, dead,true);
             break;
         }
         case 'c':

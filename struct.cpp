@@ -16,20 +16,21 @@ family::family(const family &other)
     else
     {
         oldest = new person(other.oldest->name, other.oldest->wife_name,
-                            other.oldest->born_date, other.oldest->dead_date,other.oldest->isMale);
+                            other.oldest->born_date, other.oldest->dead_date, other.oldest->isMale);
         copyTree(other.oldest, oldest);
-        currentPerson=findName(other.getCurrentName(),oldest);
+        currentPerson = findName(other.getCurrentName(), oldest);
     }
 }
 
 bool family::addPerson(bool isCompeer, string name_, string wife_name_,
-    string born, string dead,bool isMale_,person* ptr)
+                       string born, string dead, bool isMale_, person *ptr)
 {
     auto root = ptr;
-    if (ptr == nullptr && isCompeer&& oldest ==nullptr)
+    if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
         cout << "Init the oldest:";
-        oldest = new person(name_, wife_name_, born, dead,isMale_);
+        oldest = new person(name_, wife_name_, born, dead, isMale_);
+        currentPerson = oldest;
         cout << oldest->name << endl;
     }
     else if (root != nullptr && isCompeer)
@@ -40,7 +41,7 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
         {
             guy = guy->compeer;
         }
-        guy->compeer = new person(name_, wife_name_, born, dead,isMale_);
+        guy->compeer = new person(name_, wife_name_, born, dead, isMale_);
         cout << guy->compeer->name << endl;
     }
     else if (root != nullptr && !isCompeer)
@@ -48,7 +49,7 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
         cout << "Add junior:";
         if (root->junior == nullptr)
         {
-            root->junior = new person(name_, wife_name_, born, dead,isMale_);
+            root->junior = new person(name_, wife_name_, born, dead, isMale_);
             cout << root->junior->name << endl;
         }
         else
@@ -58,22 +59,23 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
             {
                 guy = guy->compeer;
             }
-            guy->compeer = new person(name_, wife_name_, born, dead,isMale_);
+            guy->compeer = new person(name_, wife_name_, born, dead, isMale_);
             cout << guy->compeer->name << endl;
         }
     }
 }
-bool family::addCompeer(string name, string wife_name,string born, string dead, bool isMale)
+bool family::addCompeer(string name, string wife_name, string born, string dead, bool isMale)
 {
-    addPerson(true,name,wife_name,born,dead,isMale,currentPerson);
+    addPerson(true, name, wife_name, born, dead, isMale, currentPerson);
 }
-bool family::addJunior(string name, string wife_name,string born, string dead, bool isMale)
+bool family::addJunior(string name, string wife_name, string born, string dead, bool isMale)
 {
-    addPerson(false,name,wife_name,born,dead,isMale,currentPerson);
+    addPerson(false, name, wife_name, born, dead, isMale, currentPerson);
 }
 void family::print()
 {
-    if(oldest == NULL) {
+    if (oldest == NULL)
+    {
         cout << "Empty!" << endl;
         return;
     }
@@ -81,7 +83,8 @@ void family::print()
 }
 void family::printCompeer()
 {
-    if(oldest == NULL) {
+    if (oldest == NULL)
+    {
         cout << "Empty!" << endl;
         return;
     }
@@ -89,7 +92,8 @@ void family::printCompeer()
 }
 void family::printAllJunior()
 {
-    if(oldest == NULL) {
+    if (oldest == NULL)
+    {
         cout << "Empty!" << endl;
         return;
     }
@@ -98,14 +102,14 @@ void family::printAllJunior()
 void family::printByName(string name_)
 {
     auto ptr = findName(name_, oldest);
-    if(ptr == NULL)
+    if (ptr == NULL)
         return;
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
 void family::printParentByName(string name_)
 {
     auto ptr = findParent(findName(name_, oldest), oldest);
-    if(ptr == NULL)
+    if (ptr == NULL)
         return;
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
@@ -161,14 +165,14 @@ void family::copyTree(const person *Source_Root, person *&Target_Root)
     if (Source_Root->junior != nullptr)
     {
         person *l = new person(Source_Root->junior->name, Source_Root->junior->wife_name,
-                               Source_Root->junior->born_date, Source_Root->junior->dead_date,Source_Root->junior->isMale);
+                               Source_Root->junior->born_date, Source_Root->junior->dead_date, Source_Root->junior->isMale);
         copyTree(Source_Root->junior, l); //copy the left;
         Target_Root->junior = l;
     }
     if (Source_Root->compeer != nullptr)
     {
         person *r = new person(Source_Root->compeer->name, Source_Root->compeer->wife_name,
-                               Source_Root->compeer->born_date, Source_Root->compeer->dead_date,Source_Root->compeer->isMale);
+                               Source_Root->compeer->born_date, Source_Root->compeer->dead_date, Source_Root->compeer->isMale);
         copyTree(Source_Root->compeer, r); //copy the right;
         Target_Root->compeer = r;
     }
@@ -188,6 +192,7 @@ person *family::findName(string name_, person *ptr)
             return com_ptr;
         return nullptr;
     }
+    return nullptr;
 }
 person *family::findParent(person *son, person *ptr)
 {
@@ -203,10 +208,37 @@ person *family::findParent(person *son, person *ptr)
             return com_ptr;
         return nullptr;
     }
+    return nullptr;
 }
-person *findPreCompeer(person *, person *)
+person *family::findPreCompeer(person *guy)
 {
+    auto tmp=findBigCompeer(guy, oldest, oldest);
+    if(tmp==guy)
+        return nullptr;
+    while(tmp->compeer!=nullptr)
+    {
+        if(tmp->compeer==guy)
+            return tmp;
+        tmp=tmp->compeer;
+    }
+    return nullptr;
+}
 
+person *family::findBigCompeer(person *guy, person *ptr, person *big)
+{
+    if (ptr != nullptr) //preorder
+    {
+        if (ptr == guy)
+            return big;
+        auto jun_ptr = findBigCompeer(guy, ptr->junior, ptr->junior);
+        auto com_ptr = findBigCompeer(guy, ptr->compeer, big);
+        if (jun_ptr != nullptr)
+            return jun_ptr;
+        if (com_ptr != nullptr)
+            return com_ptr;
+        return nullptr;
+    }
+    return nullptr;
 }
 person *family::findJunior(person *ptr)
 {
@@ -232,41 +264,41 @@ int family::findGenerationNum(person *guy, person *ptr, int gen)
         return jun > com ? jun : com;
     }
 }
-void family::changePerson(person* ptr,string name_, string wife_name_,
-    Date born, Date dead,bool isMale_)
+void family::changePerson(person *ptr, string name_, string wife_name_,
+                          Date born, Date dead, bool isMale_)
 {
-    if(ptr!=nullptr)
+    if (ptr != nullptr)
     {
-        ptr->name=name_;
-        ptr->wife_name=wife_name_;
-        ptr->born_date=born;
-        ptr->dead_date=dead;
-        ptr->isMale=isMale_;
+        ptr->name = name_;
+        ptr->wife_name = wife_name_;
+        ptr->born_date = born;
+        ptr->dead_date = dead;
+        ptr->isMale = isMale_;
     }
 }
-void family::changePerson(person*ptr ,person* source)
+void family::changePerson(person *ptr, person *source)
 {
-    if(ptr!=nullptr&&source!=nullptr)
+    if (ptr != nullptr && source != nullptr)
     {
-        ptr->name=source->name;
-        ptr->wife_name=source->wife_name;
-        ptr->born_date=source->born_date;
-        ptr->dead_date=source->dead_date;
-        ptr->isMale=source->isMale;
+        ptr->name = source->name;
+        ptr->wife_name = source->wife_name;
+        ptr->born_date = source->born_date;
+        ptr->dead_date = source->dead_date;
+        ptr->isMale = source->isMale;
     }
 }
 
 string family::getCurrentName() const
 {
-    if(currentPerson == nullptr)
+    if (currentPerson == nullptr)
         return "";
     else
         return currentPerson->name;
 }
 bool family::changeCurrentPerson(string name)
 {
-    auto ptr=findName(name,oldest);
-    if( ptr == nullptr)
+    auto ptr = findName(name, oldest);
+    if (ptr == nullptr)
         return false;
     currentPerson = ptr;
     return true;
@@ -274,40 +306,39 @@ bool family::changeCurrentPerson(string name)
 
 bool family::moveCurrentPerson(int pos)
 {
-    switch(pos)
+    switch (pos)
     {
-        case 8:
+    case 8:
+    {
+        auto ptr = findParent(findName(currentPerson->name, oldest), oldest);
+        if (ptr != nullptr)
         {
-            auto ptr= findParent(findName(currentPerson->name,oldest),oldest);
-            if(ptr!=nullptr)
-            {
-                currentPerson=ptr;
-                return true;
-            }
-            return false;
+            currentPerson = ptr;
+            return true;
         }
-        case 2:
+        return false;
+    }
+    case 2:
+    {
+        if (currentPerson->junior != nullptr)
         {
-            if(currentPerson->junior!=nullptr)
-            {
-                currentPerson=currentPerson->junior;
-                return true;
-            }
-            return false;
+            currentPerson = currentPerson->junior;
+            return true;
         }
-        case 4:
+        return false;
+    }
+    case 4:
+    {
+    }
+    case 6:
+    {
+        if (currentPerson->compeer != nullptr)
         {
-
+            currentPerson = currentPerson->compeer;
+            return true;
         }
-        case 6:
-        {
-            if(currentPerson->compeer!=nullptr)
-            {
-                currentPerson=currentPerson->compeer;
-                return true;
-            }
-            return false;
-        }
+        return false;
+    }
     }
 }
 
@@ -351,6 +382,15 @@ void family::test_z()
             traverse(oldest);
             break;
         }
+        case 'f':
+        {
+            string n;
+            cin >> n;
+            auto tmp=findPreCompeer(findName(n, oldest));
+            if(tmp!=nullptr)
+                cout<<tmp->name<<endl;
+        }
         }
     }
 }
+//a a a1 1 a b b1 0 a c c1 0 a d d1 0
