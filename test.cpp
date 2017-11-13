@@ -12,11 +12,11 @@ Generate by ZZ
 */
 #include <iostream>
 #include "struct.hpp"
-#include"Date.hpp"
+#include "Date.hpp"
 using namespace std;
 int main()
 {
-    family oldest;
+    familyTree oldest;
     while (1)
     {
         char cmd;

@@ -1,35 +1,35 @@
 #include "struct.hpp"
 
-family::family()
+familyTree::familyTree()
 {
     oldest = nullptr;
     currentPerson = nullptr;
 }
-family::~family()
+familyTree::~familyTree()
 {
     clear(oldest);
 }
-family::family(const family &other)
+familyTree::familyTree(const familyTree &other)
 {
     if (other.oldest == nullptr)
         oldest = nullptr;
     else
     {
-        oldest = new person(other.oldest->name, other.oldest->wife_name,
+        oldest = new Person(other.oldest->name, other.oldest->partnerName,
                             other.oldest->born_date, other.oldest->dead_date, other.oldest->isMale);
         copyTree(other.oldest, oldest);
         currentPerson = findName(other.getCurrentName(), oldest);
     }
 }
 
-bool family::addPerson(bool isCompeer, string name_, string wife_name_,
-                       string born, string dead, bool isMale_, person *ptr)
+bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
+                       string born, string dead, bool isMale_, Person *ptr)
 {
     auto root = ptr;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
         cout << "Init the oldest:";
-        oldest = new person(name_, wife_name_, born, dead, isMale_);
+        oldest = new Person(name_, partnerName_, born, dead, isMale_);
         currentPerson = oldest;
         cout << oldest->name << endl;
     }
@@ -41,7 +41,7 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
         {
             guy = guy->compeer;
         }
-        guy->compeer = new person(name_, wife_name_, born, dead, isMale_);
+        guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
         cout << guy->compeer->name << endl;
     }
     else if (root != nullptr && !isCompeer)
@@ -49,7 +49,7 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
         cout << "Add junior:";
         if (root->junior == nullptr)
         {
-            root->junior = new person(name_, wife_name_, born, dead, isMale_);
+            root->junior = new Person(name_, partnerName_, born, dead, isMale_);
             cout << root->junior->name << endl;
         }
         else
@@ -59,20 +59,20 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
             {
                 guy = guy->compeer;
             }
-            guy->compeer = new person(name_, wife_name_, born, dead, isMale_);
+            guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
             cout << guy->compeer->name << endl;
         }
     }
 }
-bool family::addCompeer(string name, string wife_name, string born, string dead, bool isMale)
+bool familyTree::addCompeer(string name, string partnerName, string born, string dead, bool isMale)
 {
-    addPerson(true, name, wife_name, born, dead, isMale, currentPerson);
+    addPerson(true, name, partnerName, born, dead, isMale, currentPerson);
 }
-bool family::addJunior(string name, string wife_name, string born, string dead, bool isMale)
+bool familyTree::addJunior(string name, string partnerName, string born, string dead, bool isMale)
 {
-    addPerson(false, name, wife_name, born, dead, isMale, currentPerson);
+    addPerson(false, name, partnerName, born, dead, isMale, currentPerson);
 }
-void family::print()
+void familyTree::print()
 {
     if (oldest == NULL)
     {
@@ -81,7 +81,7 @@ void family::print()
     }
     traverse(oldest);
 }
-void family::printCompeer()
+void familyTree::printCompeer()
 {
     if (oldest == NULL)
     {
@@ -90,7 +90,7 @@ void family::printCompeer()
     }
     traverseCompeer(oldest);
 }
-void family::printAllJunior()
+void familyTree::printAllJunior()
 {
     if (oldest == NULL)
     {
@@ -99,30 +99,30 @@ void family::printAllJunior()
     }
     traverseCompeer(oldest->junior);
 }
-void family::printByName(string name_)
+void familyTree::printByName(string name_)
 {
     auto ptr = findName(name_, oldest);
     if (ptr == NULL)
         return;
-    cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
-void family::printParentByName(string name_)
+void familyTree::printParentByName(string name_)
 {
     auto ptr = findParent(findName(name_, oldest), oldest);
     if (ptr == NULL)
         return;
-    cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
-void family::printGenerationNumByName(string name)
+void familyTree::printGenerationNumByName(string name)
 {
     cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
 }
 
-void family::traverse(person *ptr)
+void familyTree::traverse(Person *ptr)
 {
     while (1)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         if (ptr->junior != nullptr)
             traverse(ptr->junior);
         if (ptr->compeer != nullptr)
@@ -131,26 +131,26 @@ void family::traverse(person *ptr)
             break;
     }
 }
-void family::traverseCompeer(person *ptr)
+void familyTree::traverseCompeer(Person *ptr)
 {
     if (ptr != nullptr)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         traverseCompeer(ptr->compeer);
     }
 }
-void family::traverseJunior(person *ptr)
+void familyTree::traverseJunior(Person *ptr)
 {
     /*
     if (ptr != nullptr)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         traverseCompeer(ptr->compeer);
     }
     */
 }
 
-void family::clear(person *ptr)
+void familyTree::clear(Person *ptr)
 {
     if (ptr != nullptr)
     {
@@ -160,29 +160,29 @@ void family::clear(person *ptr)
     }
 }
 
-void family::copyTree(const person *Source_Root, person *&Target_Root)
+void familyTree::copyTree(const Person *Source_Root, Person *&Target_Root)
 {
     if (Source_Root->junior != nullptr)
     {
-        person *l = new person(Source_Root->junior->name, Source_Root->junior->wife_name,
+        Person *l = new Person(Source_Root->junior->name, Source_Root->junior->partnerName,
                                Source_Root->junior->born_date, Source_Root->junior->dead_date, Source_Root->junior->isMale);
         copyTree(Source_Root->junior, l); //copy the left;
         Target_Root->junior = l;
     }
     if (Source_Root->compeer != nullptr)
     {
-        person *r = new person(Source_Root->compeer->name, Source_Root->compeer->wife_name,
+        Person *r = new Person(Source_Root->compeer->name, Source_Root->compeer->partnerName,
                                Source_Root->compeer->born_date, Source_Root->compeer->dead_date, Source_Root->compeer->isMale);
         copyTree(Source_Root->compeer, r); //copy the right;
         Target_Root->compeer = r;
     }
 }
 
-person *family::findName(string name_, person *ptr)
+Person *familyTree::findName(string name_, Person *ptr)
 {
     if (ptr != nullptr) //preorder
     {
-        if (ptr->name == name_ || ptr->wife_name == name_)
+        if (ptr->name == name_ || ptr->partnerName == name_)
             return ptr;
         auto jun_ptr = findName(name_, ptr->junior);
         auto com_ptr = findName(name_, ptr->compeer);
@@ -194,7 +194,7 @@ person *family::findName(string name_, person *ptr)
     }
     return nullptr;
 }
-person *family::findParent(person *son, person *ptr)
+Person *familyTree::findParent(Person *son, Person *ptr)
 {
     if (ptr->junior != nullptr) //preorder
     {
@@ -210,7 +210,7 @@ person *family::findParent(person *son, person *ptr)
     }
     return nullptr;
 }
-person *family::findPreCompeer(person *guy)
+Person *familyTree::findPreCompeer(Person *guy)
 {
     auto tmp=findBigCompeer(guy, oldest, oldest);
     if(tmp==guy)
@@ -224,7 +224,7 @@ person *family::findPreCompeer(person *guy)
     return nullptr;
 }
 
-person *family::findBigCompeer(person *guy, person *ptr, person *big)
+Person *familyTree::findBigCompeer(Person *guy, Person *ptr, Person *big)
 {
     if (ptr != nullptr) //preorder
     {
@@ -240,7 +240,7 @@ person *family::findBigCompeer(person *guy, person *ptr, person *big)
     }
     return nullptr;
 }
-person *family::findJunior(person *ptr)
+Person *familyTree::findJunior(Person *ptr)
 {
     if (ptr->junior != nullptr) //preorder
     {
@@ -249,11 +249,11 @@ person *family::findJunior(person *ptr)
     else
         return nullptr;
 }
-void family::deleteOnefamily(person *ptr)
+void familyTree::deleteOnefamilyTree(Person *ptr)
 {
     ;
 }
-int family::findGenerationNum(person *guy, person *ptr, int gen)
+int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
 {
     if (ptr != nullptr) //preorder
     {
@@ -264,38 +264,38 @@ int family::findGenerationNum(person *guy, person *ptr, int gen)
         return jun > com ? jun : com;
     }
 }
-void family::changePerson(person *ptr, string name_, string wife_name_,
+void familyTree::changePerson(Person *ptr, string name_, string partnerName_,
                           Date born, Date dead, bool isMale_)
 {
     if (ptr != nullptr)
     {
         ptr->name = name_;
-        ptr->wife_name = wife_name_;
+        ptr->partnerName = partnerName_;
         ptr->born_date = born;
         ptr->dead_date = dead;
         ptr->isMale = isMale_;
     }
 }
-void family::changePerson(person *ptr, person *source)
+void familyTree::changePerson(Person *ptr, Person *source)
 {
     if (ptr != nullptr && source != nullptr)
     {
         ptr->name = source->name;
-        ptr->wife_name = source->wife_name;
+        ptr->partnerName = source->partnerName;
         ptr->born_date = source->born_date;
         ptr->dead_date = source->dead_date;
         ptr->isMale = source->isMale;
     }
 }
 
-string family::getCurrentName() const
+string familyTree::getCurrentName() const
 {
     if (currentPerson == nullptr)
         return "";
     else
         return currentPerson->name;
 }
-bool family::changeCurrentPerson(string name)
+bool familyTree::changeCurrentPerson(string name)
 {
     auto ptr = findName(name, oldest);
     if (ptr == nullptr)
@@ -304,7 +304,7 @@ bool family::changeCurrentPerson(string name)
     return true;
 }
 
-bool family::moveCurrentPerson(int pos)
+bool familyTree::moveCurrentPerson(int pos)
 {
     switch (pos)
     {
@@ -349,7 +349,7 @@ bool family::moveCurrentPerson(int pos)
     }
 }
 
-void family::test_z()
+void familyTree::test_z()
 {
     auto ptr = oldest;
     while (1)

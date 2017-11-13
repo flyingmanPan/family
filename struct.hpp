@@ -19,29 +19,29 @@ using namespace std;
 //-------------------------
 #define test
 //-------------------
-struct person
+struct Person
 {
     string name;
-    string wife_name;
+    string partnerName;
     bool isMale;
     Date born_date;
     Date dead_date;
-    person *compeer;
-    person *junior;
+    Person *compeer;
+    Person *junior;
 
-    person()
+    Person()
     {
         name = "NULL";
-        wife_name = "NULL";
+        partnerName = "NULL";
         compeer = nullptr;
         junior = nullptr;
         isMale = true;
     }
-    person(string name_, string wife_name_, string born, string dead, bool isMale_)
+    Person(string name_, string partnerName_, string born, string dead, bool isMale_)
     {
         name = name_;
-        if (wife_name_ != "NULL" && wife_name_.size())
-            wife_name = wife_name_;
+        if (partnerName_ != "NULL" && partnerName_.size())
+            partnerName = partnerName_;
         if (born.size())
             born_date = Date(born);
         if (dead.size())
@@ -50,11 +50,11 @@ struct person
         junior = nullptr;
         isMale = isMale_;
     }
-    person(string name_, string wife_name_, Date born, Date dead, bool isMale_)
+    Person(string name_, string partnerName_, Date born, Date dead, bool isMale_)
     {
         name = name_;
-        if (wife_name_ != "NULL" && wife_name_.size())
-            wife_name = wife_name_;
+        if (partnerName_ != "NULL" && partnerName_.size())
+            partnerName = partnerName_;
         born_date = born;
         dead_date = dead;
         compeer = nullptr;
@@ -63,73 +63,73 @@ struct person
     }
 };
 
-class family
+class familyTree
 {
   private:
-    person *oldest;
-    person *currentPerson;
+    Person *oldest;
+    Person *currentPerson;
 
-    void clear(person *);
+    void clear(Person *);
     //Clear all tree;
 
-    void copyTree(const person *source, person *&target);
+    void copyTree(const Person *source, Person *&target);
     //Copy the tree from source node to target node.
     //--------Change Func----------
-    bool addPerson(bool isCompeer, string name_, string wife_name,
-                   string born, string dead, bool isMale, person *ptr);
+    bool addPerson(bool isCompeer, string name_, string partnerName,
+                   string born, string dead, bool isMale, Person *ptr);
     //1:Judge which side to place,compeer or junior;
     //2:3:...
     //4:5:Date form string:e.g. 1989-06-04/20:00
     //6:On who?
 
-    void changePerson(person *ptr, string name_, string wife_name,
+    void changePerson(Person *ptr, string name_, string partnerName,
                       Date born, Date dead, bool isMale);
     //1:Who
     //...
-    void changePerson(person *ptr, person *source);
+    void changePerson(Person *ptr, Person *source);
 
     //--------Find func------------
-    person *findName(string, person *);
+    Person *findName(string, Person *);
     //include all name, such as name & wife name.
-    //person* findParent(string);
-    person *findJunior(person *);
+    //Person* findParent(string);
+    Person *findJunior(Person *);
     //Who's?
-    person *findParent(person *, person *);
+    Person *findParent(Person *, Person *);
     //find parent using findName. The second one is where to find, downside is the same.
-    person *findPreCompeer(person *);
+    Person *findPreCompeer(Person *);
     //find the front of compeer using findName. The second one is where to find, downside is the same.
-    person *findBigCompeer(person *, person *, person *);
+    Person *findBigCompeer(Person *, Person *, Person *);
     //find the first of compeer using findName.
     //The second one is where to find, downside is the same.
     //The third one is the BIG, send oldest when using.
-    int findGenerationNum(person *guy, person *ptr, int gen);
+    int findGenerationNum(Person *guy, Person *ptr, int gen);
     //Who? Root 0
     //-----------------------------
 
     //------traverse func--------
-    void traverse(person *ptr);
+    void traverse(Person *ptr);
     //traverse all tree
 
-    void traverseCompeer(person *);
+    void traverseCompeer(Person *);
     //traverse all compeer from the node.
 
-    void traverseJunior(person *);
+    void traverseJunior(Person *);
     //NULL
     //----------------------------
 
     //-------Delete func--------
     //--------WARNING----------
-    void deleteOnefamily(person *);
+    void deleteOnefamilyTree(Person *);
     //NULL
     //-----------------------
 
   public:
-    family();
-    ~family();
-    family(const family &);
+    familyTree();
+    ~familyTree();
+    familyTree(const familyTree &);
 
     void print();
-    //traverse all the family, and print
+    //traverse all the familyTree, and print
 
     void printCompeer();
     //traverse all compeer from the oldest node, and print
@@ -138,22 +138,22 @@ class family
     //traverse all compeer from the oldest's junior node, and print
 
     void printByName(string name);
-    //Print a person's info by name;
+    //Print a Person's info by name;
 
     void printParentByName(string name);
-    //Print a person's parent info by name;
+    //Print a Person's parent info by name;
 
     void printGenerationNumByName(string name);
     //Print generation number by name
     void test_z();
     //for z to test
 
-    bool addCompeer(string name, string wife_name,
+    bool addCompeer(string name, string partnerName,
                     string born, string dead, bool isMale);
-    //Add compeer at current person;
-    bool addJunior(string name, string wife_name,
+    //Add compeer at current Person;
+    bool addJunior(string name, string partnerName,
                    string born, string dead, bool isMale);
-    //Add junior at current person;
+    //Add junior at current Person;
     string getCurrentName() const;
     bool changeCurrentPerson(string name);
     bool moveCurrentPerson(int pos);
