@@ -15,12 +15,11 @@ family::family(const family &other)
         oldest = nullptr;
     else
     {
+        currentPerson = other.currentPerson;
         oldest = new person(other.oldest->name, other.oldest->wife_name,
                             other.oldest->born_date, other.oldest->dead_date,other.oldest->isMale);
         copyTree(other.oldest, oldest);
     }
-    string currentName = other.getCurrentName();
-    currentPerson = findName(currentName, oldest);
 }
 
 bool family::addPerson(bool isCompeer, string name_, string wife_name_,
@@ -64,7 +63,14 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
         }
     }
 }
-
+bool family::addCompeer(string name, string wife_name,string born, string dead, bool isMale)
+{
+    addPerson(true,name,wife_name,born,dead,isMale,currentPerson);
+}
+bool family::addJunior(string name, string wife_name,string born, string dead, bool isMale)
+{
+    addPerson(false,name,wife_name,born,dead,isMale,currentPerson);
+}
 void family::print()
 {
     if(oldest == NULL) {
@@ -248,16 +254,17 @@ void family::changePerson(person*ptr ,person* source)
 
 string family::getCurrentName()
 {
-    if(currentPerson == NULL)
+    if(currentPerson == nullptr)
         return "";
     else
         return currentPerson->name;
 }
 bool family::changeCurrentPerson(string name)
 {
-    if(findName(name) == NULL)
+    auto ptr=findName(name,oldest);
+    if( ptr == nullptr)
         return false;
-    currentPerson = findName(name);
+    currentPerson = ptr;
     return true;
 }
 

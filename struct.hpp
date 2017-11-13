@@ -141,11 +141,12 @@ class family
     void test_z();
     //for z to test
 
-    bool addCompeer(string ptr_name, string name, string wife_name,
+    bool addCompeer(string name, string wife_name,
         string born, string dead, bool isMale);
-    bool addJunior(string ptr_name, string name, string wife_name,
+    //Add compeer at current person;
+    bool addJunior(string name, string wife_name,
         string born, string dead, bool isMale);
-
+    //Add junior at current person;
     string getCurrentName();
-    bool family::changeCurrentPerson(string name);
+    bool changeCurrentPerson(string name);
 };
