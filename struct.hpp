@@ -14,6 +14,11 @@ Generate by ZZ
 #include <string>
 #include "Date.hpp"
 
+
+//For files
+#include <fstream>
+#include <sstream>
+
 using namespace std;
 
 struct person
@@ -93,6 +98,9 @@ class family
     
     void printGenerationNumByName(string name);
     //Print generation number by name
+
+    void printXML();
+    //Output XML
     void test_z();
     //for z to test
     //--------Change Func----------
@@ -138,4 +146,8 @@ class family
     void deleteOnefamily(person *);
     //NULL
     //-----------------------
+
+    //--------To XML---------
+    void toXML(person* guy);
+    //-----------
 };

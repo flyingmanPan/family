@@ -123,7 +123,10 @@ void family::printParentByName(string name_)
     auto ptr = findParent(findName(name_, oldest), oldest);
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
-
+void family::printXML()
+{
+    toXML(oldest);
+}
 void family::traverseCompeer(person *ptr)
 {
     if (ptr != nullptr)
@@ -264,5 +267,19 @@ void changePerson(person*ptr ,person* source)
         ptr->born_date=source->born_date;
         ptr->dead_date=source->dead_date;
         ptr->isMale=source->isMale;
+    }
+}
+
+void family::toXML(person* ptr)
+{
+    while (1)
+    {
+        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        if (ptr->junior != nullptr)
+            traverse(ptr->junior);
+        if (ptr->compeer != nullptr)
+            ptr = ptr->compeer;
+        else
+            break;
     }
 }
