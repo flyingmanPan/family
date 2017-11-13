@@ -35,7 +35,6 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
     }
     else if (root != nullptr && isCompeer)
     {
-        cout << "------------------------" << endl;
         auto guy = root;
         if (Date(born) < guy->born_date)
         {
@@ -113,11 +112,11 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
 }
 bool familyTree::addCompeer(string name, string partnerName, string born, string dead, bool isMale)
 {
-    addPerson(true, name, partnerName, born, dead, isMale, currentPerson);
+    return addPerson(true, name, partnerName, born, dead, isMale, currentPerson);
 }
 bool familyTree::addJunior(string name, string partnerName, string born, string dead, bool isMale)
 {
-    addPerson(false, name, partnerName, born, dead, isMale, currentPerson);
+    return addPerson(false, name, partnerName, born, dead, isMale, currentPerson);
 }
 void familyTree::print()
 {
@@ -297,7 +296,7 @@ int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
 bool familyTree::changePerson(string name_, string partnerName_,
                               Date born, Date dead, bool isMale_)
 {
-    if (findName(name_, oldest) != nullptr)
+    if ((findName(name_, oldest)!=nullptr)&&(findName(name_, oldest)!=currentPerson))
         return false;
     if (currentPerson != nullptr)
     {
@@ -463,7 +462,17 @@ void familyTree::asd_print(Person *root, int height)
     return;
 }
 //a a a1 1 a b b1 1 a c c1 0 a d d1 0 t x e e
-
+void familyTree::writeToXML()
+{
+    ofstream fileXML("users.xml");
+    fileXML << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    fileXML << "<?xml-stylesheet type=\"text/css\" href=\"xml.css\"?>\n";
+    fileXML << "<main>\n";
+    fileXML << toXML(oldest);
+    fileXML << "</main>\n";
+    fileXML.close();
+    return;
+}
 string familyTree::toXML(Person *ptr)
 {
     string temp;

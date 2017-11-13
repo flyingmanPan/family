@@ -83,10 +83,6 @@ class familyTree
     //4:5:Date form string:e.g. 1989-06-04/20:00
     //6:On who?
 
-    bool changePerson(string name_, string partnerName,
-                      Date born, Date dead, bool isMale);
-    //1:Who
-    //...
 
     //--------Find func------------
     Person *findName(string, Person *);
@@ -150,7 +146,13 @@ class familyTree
     bool addJunior(string name, string partnerName,
                    string born, string dead, bool isMale);
     //Add junior at current Person;
-    string getCurrentName() const;
+
+    bool changePerson(string name_, string partnerName,
+                      Date born, Date dead, bool isMale);
+    //1:Who
+    //...
+
+	string getCurrentName() const;
     bool changeCurrentPerson(string name);
     bool moveCurrentPerson(int pos);
     // 7  8  9
@@ -159,4 +161,6 @@ class familyTree
     //8 up,2 down,4 left,6 right
     void asd_show();
     void asd_print(Person *root, int height);
+
+    void writeToXML();
 };
