@@ -101,7 +101,7 @@ class family
     person *findBigCompeer(person *, person *, person *);
     //find the first of compeer using findName.
     //The second one is where to find, downside is the same.
-    //The third one is the BIG
+    //The third one is the BIG, send oldest when using.
     int findGenerationNum(person *guy, person *ptr, int gen);
     //Who? Root 0
     //-----------------------------

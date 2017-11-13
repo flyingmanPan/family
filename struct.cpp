@@ -310,7 +310,7 @@ bool family::moveCurrentPerson(int pos)
     {
     case 8:
     {
-        auto ptr = findParent(findName(currentPerson->name, oldest), oldest);
+        auto ptr = findParent(findBigCompeer(findName(currentPerson->name, oldest),oldest,oldest), oldest);
         if (ptr != nullptr)
         {
             currentPerson = ptr;
@@ -329,6 +329,13 @@ bool family::moveCurrentPerson(int pos)
     }
     case 4:
     {
+        auto ptr=findPreCompeer(currentPerson);
+        if(ptr!=nullptr)
+        {
+            currentPerson=ptr;
+            return true;
+        }
+        return false;
     }
     case 6:
     {
