@@ -23,7 +23,7 @@ familyTree::familyTree(const familyTree &other)
 }
 
 bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
-                       string born, string dead, bool isMale_, Person *ptr)
+                           string born, string dead, bool isMale_, Person *ptr)
 {
     auto root = ptr;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
@@ -140,7 +140,6 @@ void familyTree::traverseCompeer(Person *ptr)
     }
 }
 
-
 void familyTree::clear(Person *ptr)
 {
     if (ptr != nullptr)
@@ -203,14 +202,14 @@ Person *familyTree::findParent(Person *son, Person *ptr)
 }
 Person *familyTree::findPreCompeer(Person *guy)
 {
-    auto tmp=findBigCompeer(guy, oldest, oldest);
-    if(tmp==guy)
+    auto tmp = findBigCompeer(guy, oldest, oldest);
+    if (tmp == guy)
         return nullptr;
-    while(tmp->compeer!=nullptr)
+    while (tmp->compeer != nullptr)
     {
-        if(tmp->compeer==guy)
+        if (tmp->compeer == guy)
             return tmp;
-        tmp=tmp->compeer;
+        tmp = tmp->compeer;
     }
     return nullptr;
 }
@@ -252,7 +251,7 @@ int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
     }
 }
 void familyTree::changePerson(Person *ptr, string name_, string partnerName_,
-                          Date born, Date dead, bool isMale_)
+                              Date born, Date dead, bool isMale_)
 {
     if (ptr != nullptr)
     {
@@ -297,7 +296,7 @@ bool familyTree::moveCurrentPerson(int pos)
     {
     case 8:
     {
-        auto ptr = findParent(findBigCompeer(findName(currentPerson->name, oldest),oldest,oldest), oldest);
+        auto ptr = findParent(findBigCompeer(findName(currentPerson->name, oldest), oldest, oldest), oldest);
         if (ptr != nullptr)
         {
             currentPerson = ptr;
@@ -316,10 +315,10 @@ bool familyTree::moveCurrentPerson(int pos)
     }
     case 4:
     {
-        auto ptr=findPreCompeer(currentPerson);
-        if(ptr!=nullptr)
+        auto ptr = findPreCompeer(currentPerson);
+        if (ptr != nullptr)
         {
-            currentPerson=ptr;
+            currentPerson = ptr;
             return true;
         }
         return false;
@@ -362,9 +361,9 @@ void familyTree::test_z()
         {
             if (ptr->compeer == nullptr)
                 //cout << "compeer null" << endl;
-            if (ptr->junior == nullptr)
-                //cout << "junior null" << endl;
-            break;
+                if (ptr->junior == nullptr)
+                    //cout << "junior null" << endl;
+                    break;
         }
         case 'r':
         {
@@ -380,11 +379,34 @@ void familyTree::test_z()
         {
             string n;
             cin >> n;
-            auto tmp=findPreCompeer(findName(n, oldest));
-            if(tmp!=nullptr)
-                //cout<<tmp->name<<endl;
+            auto tmp = findPreCompeer(findName(n, oldest));
+            if (tmp != nullptr)
+            //cout<<tmp->name<<endl;
+        }
+        case 'x':
+        {
+            ofstream XML("users.xml");
+            toXML(oldest);
+            XML.close();
         }
         }
     }
 }
 //a a a1 1 a b b1 0 a c c1 0 a d d1 0
+
+bool familyTree::toXML(person *ptr)
+{
+    XML<<"<gen "<<findGenerationNum(ptr,oldest,0)<<">"<<endl;
+    while (1)
+    {
+        XML << "<Name>" << ptr->name << "</name>" << endl;
+        XML << "<partner>" << ptr->partnerName << "</partner>" << endl;
+        if (ptr->junior != nullptr)
+            toXML(ptr->junior);
+        if (ptr->compeer != nullptr)
+            ptr = ptr->compeer;
+        else
+            break;
+    }
+    XML<<"</gen "<<findGenerationNum(ptr,oldest,0)<<">"<<endl;
+}
