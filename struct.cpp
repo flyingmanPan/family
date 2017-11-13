@@ -25,6 +25,8 @@ familyTree::familyTree(const familyTree &other)
 bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
                            string born, string dead, bool isMale_, Person *ptr)
 {
+    if (findName(name_, oldest) != nullptr)
+        return false;
     auto root = ptr;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
@@ -292,28 +294,21 @@ int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
         return jun > com ? jun : com;
     }
 }
-void familyTree::changePerson(Person *ptr, string name_, string partnerName_,
+bool familyTree::changePerson(string name_, string partnerName_,
                               Date born, Date dead, bool isMale_)
 {
-    if (ptr != nullptr)
+    if (findName(name_, oldest) != nullptr)
+        return false;
+    if (currentPerson != nullptr)
     {
-        ptr->name = name_;
-        ptr->partnerName = partnerName_;
-        ptr->born_date = born;
-        ptr->dead_date = dead;
-        ptr->isMale = isMale_;
+        currentPerson->name = name_;
+        currentPerson->partnerName = partnerName_;
+        currentPerson->born_date = born;
+        currentPerson->dead_date = dead;
+        currentPerson->isMale = isMale_;
+        return true;
     }
-}
-void familyTree::changePerson(Person *ptr, Person *source)
-{
-    if (ptr != nullptr && source != nullptr)
-    {
-        ptr->name = source->name;
-        ptr->partnerName = source->partnerName;
-        ptr->born_date = source->born_date;
-        ptr->dead_date = source->dead_date;
-        ptr->isMale = source->isMale;
-    }
+    return false;
 }
 
 string familyTree::getCurrentName() const
@@ -440,14 +435,14 @@ void familyTree::test_z()
         }
     }
 }
-void asd_show()
+void familyTree::asd_show()
 {
     asd_print(oldest, 0);
     cout << endl
          << endl;
     return;
 }
-void asd_print(Person *root, int height)
+void familyTree::asd_print(Person *root, int height)
 {
     if (root == NULL)
     {
@@ -472,7 +467,7 @@ void asd_print(Person *root, int height)
 string familyTree::toXML(Person *ptr)
 {
     string temp;
-    temp = "<gen>" + to_string(findGenerationNum(ptr, oldest, 0)) + "\n";
+    temp = "<Generation>" + to_string(findGenerationNum(ptr, oldest, 0)) + "\n";
     while (1)
     {
         temp += "<Person>\n";
@@ -480,6 +475,8 @@ string familyTree::toXML(Person *ptr)
         temp += "<PartnerName>" + ptr->partnerName + "</PartnerName>\n";
         temp += "<BornDate>" + Date::dateToString(ptr->born_date) + "</BornDate>\n";
         temp += "<DeadDate>" + Date::dateToString(ptr->born_date) + "</DeadDate>\n";
+        temp += "<Gender>";
+        temp += ptr->isMale ? "Male</Gender>\n" : "Female</Gender>\n";
         if (ptr->junior != nullptr)
             temp += toXML(ptr->junior);
         if (ptr->compeer != nullptr)
@@ -491,7 +488,7 @@ string familyTree::toXML(Person *ptr)
         }
         temp += "</Person>\n";
     }
-    temp += "</gen>\n";
+    temp += "</Generation>\n";
     return temp;
 }
 bool familyTree::fromFile()
