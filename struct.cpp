@@ -139,16 +139,7 @@ void familyTree::traverseCompeer(Person *ptr)
         traverseCompeer(ptr->compeer);
     }
 }
-void familyTree::traverseJunior(Person *ptr)
-{
-    /*
-    if (ptr != nullptr)
-    {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
-        traverseCompeer(ptr->compeer);
-    }
-    */
-}
+
 
 void familyTree::clear(Person *ptr)
 {
@@ -248,10 +239,6 @@ Person *familyTree::findJunior(Person *ptr)
     }
     else
         return nullptr;
-}
-void familyTree::deleteOnefamilyTree(Person *ptr)
-{
-    ;
 }
 int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
 {

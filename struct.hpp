@@ -113,15 +113,9 @@ class familyTree
     void traverseCompeer(Person *);
     //traverse all compeer from the node.
 
-    void traverseJunior(Person *);
-    //NULL
     //----------------------------
 
     //-------Delete func--------
-    //--------WARNING----------
-    void deleteOnefamilyTree(Person *);
-    //NULL
-    //-----------------------
 
   public:
     familyTree();
