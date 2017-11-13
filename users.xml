@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gen0>
+<?xml-stylesheet type="text/css" href="xml.css"?>
+<main>
+<gen>0
+<Person>
 <Name>a</Name>
 <PartnerName>a1</PartnerName>
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
-<gen1>
+<gen>1
+<Person>
 <Name>c</Name>
 <PartnerName>c1</PartnerName>
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
+</Person>
+<Person>
 <Name>d</Name>
 <PartnerName>d1</PartnerName>
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
-</gen1>
+</Person>
+</gen>
+</Person>
+<Person>
 <Name>b</Name>
 <PartnerName>b1</PartnerName>
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
-</gen0>
+</Person>
+</gen>
+</main>

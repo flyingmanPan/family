@@ -14,6 +14,7 @@ Generate by ZZ
 #include <string>
 #include "Date.hpp"
 #include <fstream>
+#include <sstream>
 using namespace std;
 //-------------------------
 //-------------------------
@@ -115,8 +116,10 @@ class familyTree
 
     //----------------------------
 
-    //-------Delete func--------
-
+    //-------File func--------
+    string toXML(Person* person);
+    bool fromFile();
+    //-------------------------
   public:
     familyTree();
     ~familyTree();
@@ -155,5 +158,5 @@ class familyTree
     // 4  5  6
     // 1  2  3
     //8 up,2 down,4 left,6 right
-    string toXML(Person* person);
+    
 };

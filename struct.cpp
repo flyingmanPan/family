@@ -389,20 +389,24 @@ void familyTree::test_z()
         {
             ofstream fileXML("users.xml");
             fileXML << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+            fileXML << "<?xml-stylesheet type=\"text/css\" href=\"xml.css\"?>\n";
+            fileXML << "<main>\n";
             fileXML << toXML(oldest);
+            fileXML << "</main>\n";
             fileXML.close();
         }
         }
     }
 }
-//a a a1 1 a b b1 0 a c c1 0 a d d1 0
+//a a a1 1 a b b1 1 a c c1 0 a d d1 0 t x e e
 
 string familyTree::toXML(Person *ptr)
 {
     string temp;
-    temp = "<gen" + to_string(findGenerationNum(ptr, oldest, 0)) + ">\n";
+    temp = "<gen>" + to_string(findGenerationNum(ptr, oldest, 0)) + "\n";
     while (1)
     {
+        temp+= "<Person>\n";
         temp += "<Name>" + ptr->name + "</Name>\n";
         temp += "<PartnerName>" + ptr->partnerName + "</PartnerName>\n";
         temp += "<BornDate>" + Date::dateToString(ptr->born_date) + "</BornDate>\n";
@@ -412,8 +416,50 @@ string familyTree::toXML(Person *ptr)
         if (ptr->compeer != nullptr)
             ptr = ptr->compeer;
         else
+        {
+            temp+= "</Person>\n";
             break;
+        }
+        temp+= "</Person>\n";
     }
-    temp += "</gen" + to_string(findGenerationNum(ptr, oldest, 0)) + ">\n";
+    temp += "</gen>\n";
     return temp;
+}
+bool familyTree::fromFile()
+{
+    ifstream xml("users.xml");
+    string line;
+    while(getline(xml,line))
+	{
+		while(line.find("\"")!=string::npos)
+		{
+			auto pos=line.find("\"");
+			line.erase(pos,1);
+		}
+		//cout<<line<<endl;
+		istringstream strstream(line);
+		string temp;
+		User a;
+		getline(strstream,temp,',');
+		a.setName(temp);
+		getline(strstream,temp,',');
+		a.setPassword(temp);
+		getline(strstream,temp,',');
+		a.setEmail(temp);
+		getline(strstream,temp,',');
+		a.setPhone(temp);
+		for(auto i:m_userList)
+		{
+			if (i.getName()==a.getName())
+			{
+				exist=true;
+			}
+		}
+		if(!exist)
+			m_userList.push_back(a);
+
+		
+		//cout<<a.getName()<<a.getPassword()<<a.getEmail()<<a.getPhone()<<endl;
+    }
+    xml.close();
 }
