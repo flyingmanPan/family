@@ -22,6 +22,5 @@ Name,PartnerName,BornDate,DeadDate,Gender
 }
 Person
 {
-    margin-bottom: 30px;
     display: block;
 }
