@@ -1,15 +1,4 @@
-/*——————————————————————————————————————————————
 
-
-
-
-Generate by ZZ
-
-
-
-
-
-*/
 #ifndef DATE
 #define DATE
 #include <initializer_list>
@@ -25,7 +14,7 @@ class Date {
   /**
   * @brief constructor with arguments
   */
-  Date(int t_year, int t_month, int t_day, int t_hour, int t_minute);
+  Date(int t_year, int t_month, int t_day);
 
   /**
   * @brief constructor with a string
@@ -66,30 +55,6 @@ class Date {
   * @param a integer indicate the new day of a date
   */
   void setDay(const int t_day);
-
-  /**
-  * @brief return the hour of a Date
-  * @return   a integer indicate the hour of a date
-  */
-  int getHour(void) const;
-
-  /**
-  * @brief set the hour of a date
-  * @param a integer indicate the new hour of a date
-  */
-  void setHour(const int t_hour);
-
-  /**
-  * @brief return the minute of a Date
-  * @return   a integer indicate the minute of a date
-  */
-  int getMinute(void) const;
-
-  /**
-  * @brief set the minute of a date
-  * @param a integer indicate the new minute of a date
-  */
-  void setMinute(const int t_minute);
 
   /**
   *   @brief check whether the date is valid or not
@@ -144,7 +109,5 @@ class Date {
   int m_year;
   int m_month;
   int m_day;
-  int m_hour;
-  int m_minute;
 };
 #endif

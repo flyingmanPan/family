@@ -14,11 +14,6 @@ Generate by ZZ
 #include <string>
 #include "Date.hpp"
 
-
-//For files
-#include <fstream>
-#include <sstream>
-
 using namespace std;
 
 struct person
@@ -69,40 +64,13 @@ class family
 {
   private:
     person *oldest;
+    person *currentPerson;
 
     void clear(person *);
     //Clear all tree;
 
     void copyTree(const person *source, person *&target);
     //Copy the tree from source node to target node.
-
-  public:
-    family();
-    ~family();
-    family(const family &);
-
-    
-    
-
-    void printCompeer();
-    //traverse all compeer from the oldest node, and print
-
-    void printAllJunior();
-    //traverse all compeer from the oldest's junior node, and print
-
-    void printByName(string name);
-    //Print a person's info by name;
-
-    void printParentByName(string name);
-    //Print a person's parent info by name;
-    
-    void printGenerationNumByName(string name);
-    //Print generation number by name
-
-    void printXML();
-    //Output XML
-    void test_z();
-    //for z to test
     //--------Change Func----------
     bool addPerson(bool isCompeer, string name_, string wife_name,
         string born, string dead,bool isMale,person* ptr);
@@ -110,13 +78,14 @@ class family
         //2:3:...
         //4:5:Date form string:e.g. 1989-06-04/20:00
         //6:On who?
+
     void changePerson(person* ptr,string name_, string wife_name,
         Date born, Date dead,bool isMale);
         //1:Who
         //...
     void changePerson(person*ptr ,person* source);
-    //--------Find func------------
 
+    //--------Find func------------
     person *findName(string, person *);
     //include all name, such as name & wife name.
     //person* findParent(string);
@@ -130,7 +99,7 @@ class family
 
 
     //------traverse func--------
-    void traverse(person *);
+    void traverse(person * ptr);
     //traverse all tree
 
     void traverseCompeer(person *);
@@ -147,7 +116,36 @@ class family
     //NULL
     //-----------------------
 
-    //--------To XML---------
-    void toXML(person* guy);
-    //-----------
+  public:
+    family();
+    ~family();
+    family(const family &);
+
+    void print();
+    //traverse all the family, and print
+
+    void printCompeer();
+    //traverse all compeer from the oldest node, and print
+
+    void printAllJunior();
+    //traverse all compeer from the oldest's junior node, and print
+
+    void printByName(string name);
+    //Print a person's info by name;
+
+    void printParentByName(string name);
+    //Print a person's parent info by name;
+
+    void printGenerationNumByName(string name);
+    //Print generation number by name
+    void test_z();
+    //for z to test
+
+    bool addCompeer(string ptr_name, string name, string wife_name,
+        string born, string dead, bool isMale);
+    bool addJunior(string ptr_name, string name, string wife_name,
+        string born, string dead, bool isMale);
+
+    string getCurrentName();
+    bool family::changeCurrentPerson(string name);
 };

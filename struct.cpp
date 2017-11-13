@@ -1,51 +1,9 @@
 #include "struct.hpp"
-void family::test_z()
-{
-    auto ptr = oldest;
-    while (1)
-    {
-        char cmd;
-        cout << "test>";
-        cin >> cmd;
-        switch (cmd)
-        {
-        case 'e':
-            return;
-        case 'j':
-        {
-            ptr = ptr->junior;
-            break;
-        }
-        case 'c':
-        {
-            ptr = ptr->compeer;
-            break;
-        }
-        case 'l':
-        {
-            if (ptr->compeer == nullptr)
-                cout << "compeer null" << endl;
-            if (ptr->junior == nullptr)
-                cout << "junior null" << endl;
-            break;
-        }
-        case 'r':
-        {
-            clear(oldest);
-            break;
-        }
-        case 't':
-        {
-            traverse(oldest);
-            break;
-        }
-        }
-    }
-}
 
 family::family()
 {
     oldest = nullptr;
+    currentPerson = nullptr;
 }
 family::~family()
 {
@@ -61,9 +19,11 @@ family::family(const family &other)
                             other.oldest->born_date, other.oldest->dead_date,other.oldest->isMale);
         copyTree(other.oldest, oldest);
     }
+    string currentName = other.getCurrentName();
+    currentPerson = findName(currentName, oldest);
 }
 
-bool family::addPerson(bool isCompeer, string name_, string wife_name_, 
+bool family::addPerson(bool isCompeer, string name_, string wife_name_,
     string born, string dead,bool isMale_,person* ptr)
 {
     auto root = ptr;
@@ -105,27 +65,61 @@ bool family::addPerson(bool isCompeer, string name_, string wife_name_,
     }
 }
 
+void family::print()
+{
+    if(oldest == NULL) {
+        cout << "Empty!" << endl;
+        return;
+    }
+    traverse(oldest);
+}
 void family::printCompeer()
 {
+    if(oldest == NULL) {
+        cout << "Empty!" << endl;
+        return;
+    }
     traverseCompeer(oldest);
 }
 void family::printAllJunior()
 {
+    if(oldest == NULL) {
+        cout << "Empty!" << endl;
+        return;
+    }
     traverseCompeer(oldest->junior);
 }
 void family::printByName(string name_)
 {
     auto ptr = findName(name_, oldest);
+    if(ptr == NULL)
+        return;
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
 void family::printParentByName(string name_)
 {
     auto ptr = findParent(findName(name_, oldest), oldest);
+    if(ptr == NULL)
+        return;
     cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
 }
-void family::printXML()
+void family::printGenerationNumByName(string name)
 {
-    toXML(oldest);
+    cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
+}
+
+void family::traverse(person *ptr)
+{
+    while (1)
+    {
+        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
+        if (ptr->junior != nullptr)
+            traverse(ptr->junior);
+        if (ptr->compeer != nullptr)
+            ptr = ptr->compeer;
+        else
+            break;
+    }
 }
 void family::traverseCompeer(person *ptr)
 {
@@ -134,10 +128,6 @@ void family::traverseCompeer(person *ptr)
         cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
         traverseCompeer(ptr->compeer);
     }
-}
-void family::printGenerationNumByName(string name)
-{
-    cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
 }
 void family::traverseJunior(person *ptr)
 {
@@ -159,7 +149,6 @@ void family::clear(person *ptr)
         delete ptr;
     }
 }
-
 
 void family::copyTree(const person *Source_Root, person *&Target_Root)
 {
@@ -192,19 +181,6 @@ person *family::findName(string name_, person *ptr)
         if (com_ptr != nullptr)
             return com_ptr;
         return nullptr;
-    }
-}
-void family::traverse(person *ptr)
-{
-    while (1)
-    {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
-        if (ptr->junior != nullptr)
-            traverse(ptr->junior);
-        if (ptr->compeer != nullptr)
-            ptr = ptr->compeer;
-        else
-            break;
     }
 }
 person *family::findParent(person *son, person *ptr)
@@ -246,7 +222,7 @@ int family::findGenerationNum(person *guy, person *ptr, int gen)
         return jun > com ? jun : com;
     }
 }
-void changePerson(person* ptr,string name_, string wife_name_,
+void family::changePerson(person* ptr,string name_, string wife_name_,
     Date born, Date dead,bool isMale_)
 {
     if(ptr!=nullptr)
@@ -258,7 +234,7 @@ void changePerson(person* ptr,string name_, string wife_name_,
         ptr->isMale=isMale_;
     }
 }
-void changePerson(person*ptr ,person* source)
+void family::changePerson(person*ptr ,person* source)
 {
     if(ptr!=nullptr&&source!=nullptr)
     {
@@ -270,16 +246,61 @@ void changePerson(person*ptr ,person* source)
     }
 }
 
-void family::toXML(person* ptr)
+string family::getCurrentName()
 {
+    if(currentPerson == NULL)
+        return "";
+    else
+        return currentPerson->name;
+}
+bool family::changeCurrentPerson(string name)
+{
+    if(findName(name) == NULL)
+        return false;
+    currentPerson = findName(name);
+    return true;
+}
+
+void family::test_z()
+{
+    auto ptr = oldest;
     while (1)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->wife_name << endl;
-        if (ptr->junior != nullptr)
-            traverse(ptr->junior);
-        if (ptr->compeer != nullptr)
-            ptr = ptr->compeer;
-        else
+        char cmd;
+        cout << "test>";
+        cin >> cmd;
+        switch (cmd)
+        {
+        case 'e':
+            return;
+        case 'j':
+        {
+            ptr = ptr->junior;
             break;
+        }
+        case 'c':
+        {
+            ptr = ptr->compeer;
+            break;
+        }
+        case 'l':
+        {
+            if (ptr->compeer == nullptr)
+                cout << "compeer null" << endl;
+            if (ptr->junior == nullptr)
+                cout << "junior null" << endl;
+            break;
+        }
+        case 'r':
+        {
+            clear(oldest);
+            break;
+        }
+        case 't':
+        {
+            traverse(oldest);
+            break;
+        }
+        }
     }
 }
