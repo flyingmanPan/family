@@ -93,6 +93,8 @@ class family
     //Who's?
     person *findParent(person *, person *);
     //find parent using findName. The second one is where to find, downside is the same.
+    person *findPreCompeer(person *, person *);
+    //find the front of compeer using findName. The second one is where to find, downside is the same.
     int findGenerationNum(person *guy,person* ptr,int gen);
     //Who? Root 0
     //-----------------------------

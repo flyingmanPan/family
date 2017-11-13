@@ -204,6 +204,10 @@ person *family::findParent(person *son, person *ptr)
         return nullptr;
     }
 }
+person *findPreCompeer(person *, person *)
+{
+
+}
 person *family::findJunior(person *ptr)
 {
     if (ptr->junior != nullptr) //preorder
@@ -282,7 +286,28 @@ bool family::moveCurrentPerson(int pos)
             }
             return false;
         }
-        case 
+        case 2:
+        {
+            if(currentPerson->junior!=nullptr)
+            {
+                currentPerson=currentPerson->junior;
+                return true;
+            }
+            return false;
+        }
+        case 4:
+        {
+
+        }
+        case 6:
+        {
+            if(currentPerson->compeer!=nullptr)
+            {
+                currentPerson=currentPerson->compeer;
+                return true;
+            }
+            return false;
+        }
     }
 }
 
