@@ -31,7 +31,7 @@ char getch_(int echo)
     resetTermios();
     return ch;
 }
-#endif
+
 
 /* Read 1 character without echo */
 char getch(void)
@@ -44,6 +44,7 @@ char getche(void)
 {
     return getch_(1);
 }
+#endif
 #include "struct.hpp"
 using namespace std;
 
