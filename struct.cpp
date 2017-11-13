@@ -28,41 +28,86 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
     auto root = ptr;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
-        //cout << "Init the oldest:";
         oldest = new Person(name_, partnerName_, born, dead, isMale_);
         currentPerson = oldest;
-        //cout << oldest->name << endl;
     }
     else if (root != nullptr && isCompeer)
     {
-        //cout << "Add compeer:";
+        cout << "------------------------" << endl;
         auto guy = root;
-        while (guy->compeer != nullptr)
+        if (Date(born) < guy->born_date)
         {
-            guy = guy->compeer;
+            if (guy == oldest)
+            {
+                auto temp = new Person(name_, partnerName_, born, dead, isMale_);
+                temp->compeer = oldest;
+                oldest = temp;
+                return true;
+            }
+            auto guy_parent = findParent(guy, oldest);
+            guy_parent->junior = nullptr;
+            guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
+            guy_parent->junior->compeer = guy;
         }
-        guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
-        //cout << guy->compeer->name << endl;
+        else
+        {
+            auto temp = new Person(name_, partnerName_, born, dead, isMale_);
+            if (guy->compeer == nullptr)
+            {
+                guy->compeer = temp;
+                return true;
+            }
+            while (Date(born) >= guy->compeer->born_date)
+            {
+                guy = guy->compeer;
+                if (guy->compeer == nullptr)
+                {
+                    guy->compeer = temp;
+                    return true;
+                }
+            }
+            temp->compeer = guy->compeer;
+            guy->compeer = temp;
+        }
     }
     else if (root != nullptr && !isCompeer)
     {
-        //cout << "Add junior:";
         if (root->junior == nullptr)
         {
             root->junior = new Person(name_, partnerName_, born, dead, isMale_);
-            //cout << root->junior->name << endl;
         }
         else
         {
             auto guy = root->junior;
-            while (guy->compeer != nullptr)
+            if (Date(born) < guy->born_date)
             {
-                guy = guy->compeer;
+                root->junior = nullptr;
+                root->junior = new Person(name_, partnerName_, born, dead, isMale_);
+                root->junior->compeer = guy;
             }
-            guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
-            //cout << guy->compeer->name << endl;
+            else
+            {
+                auto temp = new Person(name_, partnerName_, born, dead, isMale_);
+                if (guy->compeer == nullptr)
+                {
+                    guy->compeer = temp;
+                    return true;
+                }
+                while (Date(born) >= guy->compeer->born_date)
+                {
+                    guy = guy->compeer;
+                    if (guy->compeer == nullptr)
+                    {
+                        guy->compeer = temp;
+                        return true;
+                    }
+                }
+                temp->compeer = guy->compeer;
+                guy->compeer = temp;
+            }
         }
     }
+    return true;
 }
 bool familyTree::addCompeer(string name, string partnerName, string born, string dead, bool isMale)
 {
@@ -76,7 +121,6 @@ void familyTree::print()
 {
     if (oldest == NULL)
     {
-        //cout << "Empty!" << endl;
         return;
     }
     traverse(oldest);
@@ -85,7 +129,6 @@ void familyTree::printCompeer()
 {
     if (oldest == NULL)
     {
-        //cout << "Empty!" << endl;
         return;
     }
     traverseCompeer(oldest);
@@ -94,7 +137,6 @@ void familyTree::printAllJunior()
 {
     if (oldest == NULL)
     {
-        //cout << "Empty!" << endl;
         return;
     }
     traverseCompeer(oldest->junior);
@@ -104,25 +146,25 @@ void familyTree::printByName(string name_)
     auto ptr = findName(name_, oldest);
     if (ptr == NULL)
         return;
-    //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
 void familyTree::printParentByName(string name_)
 {
     auto ptr = findParent(findName(name_, oldest), oldest);
     if (ptr == NULL)
         return;
-    //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
 void familyTree::printGenerationNumByName(string name)
 {
-    //cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
+    cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
 }
 
 void familyTree::traverse(Person *ptr)
 {
     while (1)
     {
-        //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         if (ptr->junior != nullptr)
             traverse(ptr->junior);
         if (ptr->compeer != nullptr)
@@ -135,7 +177,7 @@ void familyTree::traverseCompeer(Person *ptr)
 {
     if (ptr != nullptr)
     {
-        //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         traverseCompeer(ptr->compeer);
     }
 }
@@ -398,6 +440,33 @@ void familyTree::test_z()
         }
     }
 }
+void asd_show()
+{
+    asd_print(oldest, 0);
+    cout << endl
+         << endl;
+    return;
+}
+void asd_print(Person *root, int height)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    asd_print(root->compeer, height + 1);
+    for (int i = 0; i < height; i++)
+        cout << "     ";
+    cout << root->name;
+    if ((root->junior != NULL) && (root->compeer != NULL))
+        cout << "<";
+    else if (root->junior != NULL)
+        cout << "\\";
+    else if (root->compeer != NULL)
+        cout << "/";
+    cout << endl;
+    asd_print(root->junior, height + 1);
+    return;
+}
 //a a a1 1 a b b1 1 a c c1 0 a d d1 0 t x e e
 
 string familyTree::toXML(Person *ptr)
@@ -406,7 +475,7 @@ string familyTree::toXML(Person *ptr)
     temp = "<gen>" + to_string(findGenerationNum(ptr, oldest, 0)) + "\n";
     while (1)
     {
-        temp+= "<Person>\n";
+        temp += "<Person>\n";
         temp += "<Name>" + ptr->name + "</Name>\n";
         temp += "<PartnerName>" + ptr->partnerName + "</PartnerName>\n";
         temp += "<BornDate>" + Date::dateToString(ptr->born_date) + "</BornDate>\n";
@@ -417,10 +486,10 @@ string familyTree::toXML(Person *ptr)
             ptr = ptr->compeer;
         else
         {
-            temp+= "</Person>\n";
+            temp += "</Person>\n";
             break;
         }
-        temp+= "</Person>\n";
+        temp += "</Person>\n";
     }
     temp += "</gen>\n";
     return temp;
@@ -429,37 +498,38 @@ bool familyTree::fromFile()
 {
     ifstream xml("users.xml");
     string line;
-    while(getline(xml,line))
-	{
-		while(line.find("\"")!=string::npos)
-		{
-			auto pos=line.find("\"");
-			line.erase(pos,1);
-		}
-		//cout<<line<<endl;
-		istringstream strstream(line);
-		string temp;
-		User a;
-		getline(strstream,temp,',');
-		a.setName(temp);
-		getline(strstream,temp,',');
-		a.setPassword(temp);
-		getline(strstream,temp,',');
-		a.setEmail(temp);
-		getline(strstream,temp,',');
-		a.setPhone(temp);
-		for(auto i:m_userList)
-		{
-			if (i.getName()==a.getName())
-			{
-				exist=true;
-			}
-		}
-		if(!exist)
-			m_userList.push_back(a);
+    while (getline(xml, line))
+    {
+        /*
+        while (line.find("\"") != string::npos)
+        {
+            auto pos = line.find("\"");
+            line.erase(pos, 1);
+        }
+        //cout<<line<<endl;
+        istringstream strstream(line);
+        string temp;
+        User a;
+        getline(strstream, temp, ',');
+        a.setName(temp);
+        getline(strstream, temp, ',');
+        a.setPassword(temp);
+        getline(strstream, temp, ',');
+        a.setEmail(temp);
+        getline(strstream, temp, ',');
+        a.setPhone(temp);
+        for (auto i : m_userList)
+        {
+            if (i.getName() == a.getName())
+            {
+                exist = true;
+            }
+        }
+        if (!exist)
+            m_userList.push_back(a);
 
-		
-		//cout<<a.getName()<<a.getPassword()<<a.getEmail()<<a.getPhone()<<endl;
+        //cout<<a.getName()<<a.getPassword()<<a.getEmail()<<a.getPhone()<<endl;
+        */
     }
     xml.close();
 }
