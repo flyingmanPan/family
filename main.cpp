@@ -4,8 +4,6 @@
 #else
 #include <termios.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <term.h>
 static struct termios old, new_;
 
 /* Initialize new terminal i/o settings */
