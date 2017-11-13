@@ -28,29 +28,29 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
     auto root = ptr;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
-        cout << "Init the oldest:";
+        //cout << "Init the oldest:";
         oldest = new Person(name_, partnerName_, born, dead, isMale_);
         currentPerson = oldest;
-        cout << oldest->name << endl;
+        //cout << oldest->name << endl;
     }
     else if (root != nullptr && isCompeer)
     {
-        cout << "Add compeer:";
+        //cout << "Add compeer:";
         auto guy = root;
         while (guy->compeer != nullptr)
         {
             guy = guy->compeer;
         }
         guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
-        cout << guy->compeer->name << endl;
+        //cout << guy->compeer->name << endl;
     }
     else if (root != nullptr && !isCompeer)
     {
-        cout << "Add junior:";
+        //cout << "Add junior:";
         if (root->junior == nullptr)
         {
             root->junior = new Person(name_, partnerName_, born, dead, isMale_);
-            cout << root->junior->name << endl;
+            //cout << root->junior->name << endl;
         }
         else
         {
@@ -60,7 +60,7 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
                 guy = guy->compeer;
             }
             guy->compeer = new Person(name_, partnerName_, born, dead, isMale_);
-            cout << guy->compeer->name << endl;
+            //cout << guy->compeer->name << endl;
         }
     }
 }
@@ -76,7 +76,7 @@ void familyTree::print()
 {
     if (oldest == NULL)
     {
-        cout << "Empty!" << endl;
+        //cout << "Empty!" << endl;
         return;
     }
     traverse(oldest);
@@ -85,7 +85,7 @@ void familyTree::printCompeer()
 {
     if (oldest == NULL)
     {
-        cout << "Empty!" << endl;
+        //cout << "Empty!" << endl;
         return;
     }
     traverseCompeer(oldest);
@@ -94,7 +94,7 @@ void familyTree::printAllJunior()
 {
     if (oldest == NULL)
     {
-        cout << "Empty!" << endl;
+        //cout << "Empty!" << endl;
         return;
     }
     traverseCompeer(oldest->junior);
@@ -104,25 +104,25 @@ void familyTree::printByName(string name_)
     auto ptr = findName(name_, oldest);
     if (ptr == NULL)
         return;
-    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+    //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
 void familyTree::printParentByName(string name_)
 {
     auto ptr = findParent(findName(name_, oldest), oldest);
     if (ptr == NULL)
         return;
-    cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+    //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
 }
 void familyTree::printGenerationNumByName(string name)
 {
-    cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
+    //cout << findGenerationNum(findName(name, oldest), oldest, 1) << endl;
 }
 
 void familyTree::traverse(Person *ptr)
 {
     while (1)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+        //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         if (ptr->junior != nullptr)
             traverse(ptr->junior);
         if (ptr->compeer != nullptr)
@@ -135,7 +135,7 @@ void familyTree::traverseCompeer(Person *ptr)
 {
     if (ptr != nullptr)
     {
-        cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
+        //cout << "Name:" << ptr->name << " Wife:" << ptr->partnerName << endl;
         traverseCompeer(ptr->compeer);
     }
 }
@@ -342,7 +342,7 @@ void familyTree::test_z()
     while (1)
     {
         char cmd;
-        cout << "test>";
+        //cout << "test>";
         cin >> cmd;
         switch (cmd)
         {
@@ -361,9 +361,9 @@ void familyTree::test_z()
         case 'l':
         {
             if (ptr->compeer == nullptr)
-                cout << "compeer null" << endl;
+                //cout << "compeer null" << endl;
             if (ptr->junior == nullptr)
-                cout << "junior null" << endl;
+                //cout << "junior null" << endl;
             break;
         }
         case 'r':
@@ -382,7 +382,7 @@ void familyTree::test_z()
             cin >> n;
             auto tmp=findPreCompeer(findName(n, oldest));
             if(tmp!=nullptr)
-                cout<<tmp->name<<endl;
+                //cout<<tmp->name<<endl;
         }
         }
     }
