@@ -381,32 +381,39 @@ void familyTree::test_z()
             cin >> n;
             auto tmp = findPreCompeer(findName(n, oldest));
             if (tmp != nullptr)
-            //cout<<tmp->name<<endl;
+                //cout<<tmp->name<<endl;
+                ;
+            break;
         }
         case 'x':
         {
-            ofstream XML("users.xml");
-            toXML(oldest);
-            XML.close();
+            ofstream fileXML("users.xml");
+            fileXML << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+            fileXML << toXML(oldest);
+            fileXML.close();
         }
         }
     }
 }
 //a a a1 1 a b b1 0 a c c1 0 a d d1 0
 
-bool familyTree::toXML(person *ptr)
+string familyTree::toXML(Person *ptr)
 {
-    XML<<"<gen "<<findGenerationNum(ptr,oldest,0)<<">"<<endl;
+    string temp;
+    temp = "<gen" + to_string(findGenerationNum(ptr, oldest, 0)) + ">\n";
     while (1)
     {
-        XML << "<Name>" << ptr->name << "</name>" << endl;
-        XML << "<partner>" << ptr->partnerName << "</partner>" << endl;
+        temp += "<Name>" + ptr->name + "</Name>\n";
+        temp += "<PartnerName>" + ptr->partnerName + "</PartnerName>\n";
+        temp += "<BornDate>" + Date::dateToString(ptr->born_date) + "</BornDate>\n";
+        temp += "<DeadDate>" + Date::dateToString(ptr->born_date) + "</DeadDate>\n";
         if (ptr->junior != nullptr)
-            toXML(ptr->junior);
+            temp += toXML(ptr->junior);
         if (ptr->compeer != nullptr)
             ptr = ptr->compeer;
         else
             break;
     }
-    XML<<"</gen "<<findGenerationNum(ptr,oldest,0)<<">"<<endl;
+    temp += "</gen" + to_string(findGenerationNum(ptr, oldest, 0)) + ">\n";
+    return temp;
 }

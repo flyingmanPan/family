@@ -13,7 +13,7 @@ Generate by ZZ
 #include <iostream>
 #include <string>
 #include "Date.hpp"
-
+#include <fstream>
 using namespace std;
 //-------------------------
 //-------------------------
@@ -155,5 +155,5 @@ class familyTree
     // 4  5  6
     // 1  2  3
     //8 up,2 down,4 left,6 right
-    bool toXML(Person* person);
+    string toXML(Person* person);
 };
