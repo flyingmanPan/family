@@ -23,19 +23,19 @@ familyTree::familyTree(const familyTree &other)
 }
 
 bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
-                           string born, string dead, bool isMale_, Person *ptr)
+                           string born, string dead, bool isMale_, Person *ptr_)
 {
     if (findName(name_, oldest) != nullptr)
         return false;
-    auto root = ptr;
+    auto ptr = ptr_;
     if (ptr == nullptr && isCompeer && oldest == nullptr)
     {
         oldest = new Person(name_, partnerName_, born, dead, isMale_);
         currentPerson = oldest;
     }
-    else if (root != nullptr && isCompeer)
+    else if (ptr != nullptr && isCompeer)
     {
-        auto guy = root;
+        auto guy = ptr;
         if (Date(born) < guy->born_date)
         {
             if (guy == oldest)
@@ -47,15 +47,21 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
             while((findPreCompeer(guy)!=nullptr) && (findPreCompeer(guy)->born_date > Date(born)))
             {
                 guy = findPreCompeer(guy);
-                if (findPreCompeer(guy) == nullptr) {
-                    auto guy_parent = findParent(guy, oldest);
-                    guy_parent->junior = nullptr;
-                    guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
-                    guy_parent->junior->compeer = guy;
-                    return true;
-                }
             }
-
+            if (findPreCompeer(guy) == nullptr) {
+                auto guy_parent = findParent(guy, oldest);
+                guy_parent->junior = nullptr;
+                guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
+                guy_parent->junior->compeer = guy;
+                return true;
+            }
+            else {
+                auto guy_brother = findPreCompeer(guy);
+                guy_brother->compeer = nullptr;
+                guy_brother->compeer = new Person(name_, partnerName_, born, dead, isMale_);
+                guy_brother->compeer->compeer = guy;
+                return true;
+            }
         }
         else
         {
@@ -78,20 +84,20 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
             guy->compeer = temp;
         }
     }
-    else if (root != nullptr && !isCompeer)
+    else if (ptr != nullptr && !isCompeer)
     {
-        if (root->junior == nullptr)
+        if (ptr->junior == nullptr)
         {
-            root->junior = new Person(name_, partnerName_, born, dead, isMale_);
+            ptr->junior = new Person(name_, partnerName_, born, dead, isMale_);
         }
         else
         {
-            auto guy = root->junior;
+            auto guy = ptr->junior;
             if (Date(born) < guy->born_date)
             {
-                root->junior = nullptr;
-                root->junior = new Person(name_, partnerName_, born, dead, isMale_);
-                root->junior->compeer = guy;
+                ptr->junior = nullptr;
+                ptr->junior = new Person(name_, partnerName_, born, dead, isMale_);
+                ptr->junior->compeer = guy;
             }
             else
             {
@@ -456,24 +462,24 @@ void familyTree::asd_show()
          << endl;
     return;
 }
-void familyTree::asd_print(Person *root, int height)
+void familyTree::asd_print(Person *ptr, int height)
 {
-    if (root == NULL)
+    if (ptr == NULL)
     {
         return;
     }
-    asd_print(root->compeer, height + 1);
+    asd_print(ptr->compeer, height + 1);
     for (int i = 0; i < height; i++)
         cout << "     ";
-    cout << root->name;
-    if ((root->junior != NULL) && (root->compeer != NULL))
+    cout << ptr->name;
+    if ((ptr->junior != NULL) && (ptr->compeer != NULL))
         cout << "<";
-    else if (root->junior != NULL)
+    else if (ptr->junior != NULL)
         cout << "\\";
-    else if (root->compeer != NULL)
+    else if (ptr->compeer != NULL)
         cout << "/";
     cout << endl;
-    asd_print(root->junior, height + 1);
+    asd_print(ptr->junior, height + 1);
     return;
 }
 //a a a1 1 a b b1 1 a c c1 0 a d d1 0 t x e e
