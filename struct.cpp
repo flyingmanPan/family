@@ -38,29 +38,27 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
         auto guy = ptr;
         if (Date(born) < guy->born_date)
         {
+            while((findPreCompeer(guy)!=nullptr) && (findPreCompeer(guy)->born_date > Date(born)))
+            {
+                guy = findPreCompeer(guy);
+            }
             if (guy == oldest)
             {
                 auto temp = new Person(name_, partnerName_, born, dead, isMale_);
                 temp->compeer = oldest;
                 oldest = temp;
             }
-            while((findPreCompeer(guy)!=nullptr) && (findPreCompeer(guy)->born_date > Date(born)))
-            {
-                guy = findPreCompeer(guy);
-            }
-            if (findPreCompeer(guy) == nullptr) {
+            else if (findPreCompeer(guy) == nullptr) {
                 auto guy_parent = findParent(guy, oldest);
                 guy_parent->junior = nullptr;
                 guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
                 guy_parent->junior->compeer = guy;
-                return true;
             }
             else {
                 auto guy_brother = findPreCompeer(guy);
                 guy_brother->compeer = nullptr;
                 guy_brother->compeer = new Person(name_, partnerName_, born, dead, isMale_);
                 guy_brother->compeer->compeer = guy;
-                return true;
             }
         }
         else
