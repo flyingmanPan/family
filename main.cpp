@@ -31,7 +31,6 @@ char getch_(int echo)
     resetTermios();
     return ch;
 }
-#endif
 
 /* Read 1 character without echo */
 char getch(void)
@@ -44,6 +43,7 @@ char getche(void)
 {
     return getch_(1);
 }
+#endif
 #include "struct.hpp"
 using namespace std;
 
@@ -89,6 +89,10 @@ int main(void)
         else if (oper == '0')
         {
             break;
+        }
+        else if (oper == 't')
+        {
+            obj.test_z();
         }
     }
     return 0;

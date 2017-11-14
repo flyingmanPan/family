@@ -74,7 +74,12 @@ int main()
             cin>>temp;
             oldest.printGenerationNumByName(temp);
         }
+        case 'x':
+        {
+            oldest.writeToXML();
+            break;
+        }
         }
     }
 }
-//a a a1 1 a b b1 1 a c c1 0 a d d1 0 t x e e
+//a a a1 1 a b b1 1 a c c1 0 a d d1 0  x e 

@@ -290,8 +290,11 @@ int familyTree::findGenerationNum(Person *guy, Person *ptr, int gen)
             return gen;
         auto jun = findGenerationNum(guy, ptr->junior, gen + 1);
         auto com = findGenerationNum(guy, ptr->compeer, gen);
+        if(jun==-1&&com==-1)
+            return -1;
         return jun > com ? jun : com;
     }
+    return -1;
 }
 bool familyTree::changePerson(string name_, string partnerName_,
                               Date born, Date dead, bool isMale_)
@@ -373,7 +376,7 @@ bool familyTree::moveCurrentPerson(int pos)
 
 void familyTree::test_z()
 {
-    auto ptr = oldest;
+    auto ptr = currentPerson;
     while (1)
     {
         char cmd;
@@ -430,6 +433,11 @@ void familyTree::test_z()
             fileXML << toXML(oldest);
             fileXML << "</main>\n";
             fileXML.close();
+        }
+        case 'g':
+        {
+            cout<<findGenerationNum(currentPerson,oldest,0)<<endl;
+            break;
         }
         }
     }
