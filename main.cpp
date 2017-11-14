@@ -31,6 +31,10 @@ char getch_(int echo)
     resetTermios();
     return ch;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd0b625c10459f0c70ed318da117c95235de580b
 
 /* Read 1 character without echo */
 char getch(void)

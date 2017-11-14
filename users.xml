@@ -8,8 +8,9 @@
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
 <Gender>Male</Gender>
-<Generation>1
+<Generation>6333600
 <Person>
+<<<<<<< HEAD
 <Name>r</Name>
 <PartnerName></PartnerName>
 <BornDate>0000-00-00</BornDate>
@@ -18,6 +19,9 @@
 <Generation>2
 <Person>
 <Name>t</Name>
+=======
+<Name>f</Name>
+>>>>>>> fd0b625c10459f0c70ed318da117c95235de580b
 <PartnerName></PartnerName>
 <BornDate>0000-00-00</BornDate>
 <DeadDate>0000-00-00</DeadDate>
@@ -25,6 +29,7 @@
 </Person>
 </Generation>
 </Person>
+<<<<<<< HEAD
 <Person>
 <Name>e</Name>
 <PartnerName></PartnerName>
@@ -32,6 +37,8 @@
 <DeadDate>0000-00-00</DeadDate>
 <Gender>Male</Gender>
 </Person>
+=======
+>>>>>>> fd0b625c10459f0c70ed318da117c95235de580b
 </Generation>
 </Person>
 </Generation>
