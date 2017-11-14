@@ -43,12 +43,19 @@ bool familyTree::addPerson(bool isCompeer, string name_, string partnerName_,
                 auto temp = new Person(name_, partnerName_, born, dead, isMale_);
                 temp->compeer = oldest;
                 oldest = temp;
-                return true;
             }
-            auto guy_parent = findParent(guy, oldest);
-            guy_parent->junior = nullptr;
-            guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
-            guy_parent->junior->compeer = guy;
+            while((findPreCompeer(guy)!=nullptr) && (findPreCompeer(guy)->born_date > Date(born)))
+            {
+                guy = findPreCompeer(guy);
+                if (findPreCompeer(guy) == nullptr) {
+                    auto guy_parent = findParent(guy, oldest);
+                    guy_parent->junior = nullptr;
+                    guy_parent->junior = new Person(name_, partnerName_, born, dead, isMale_);
+                    guy_parent->junior->compeer = guy;
+                    return true;
+                }
+            }
+
         }
         else
         {
@@ -484,7 +491,7 @@ void familyTree::writeToXML()
 string familyTree::toXML(Person *ptr)
 {
     string temp;
-    temp = "<Generation>" + to_string(findGenerationNum(ptr, oldest, 0)) + "\n";
+    temp = "<Generation>" + to_string(findGenerationNum(ptr, oldest, 1)) + "\n";
     while (1)
     {
         temp += "<Person>\n";
